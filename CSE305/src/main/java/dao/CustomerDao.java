@@ -67,14 +67,14 @@ public class CustomerDao {
 		 * The students code to fetch data from the database will be written here
 		 * The customer record is required to be encapsulated as a "Customer" class object
 		 */
-		
+		Customer customer = new Customer();
+
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("select * from CustomerData where FirstName like \'%" + searchKeyword +"%\'" + "or LastName like \'%" + searchKeyword + "%\'");
+			ResultSet rs = st.executeQuery("SELECT C.CustomerID, SUM(Z.ClosingBid) as Profits FROM AuctionData Z, ItemData I, CustomerData C WHERE Z.ItemID = I.ItemID AND Z.SellerID = C.CustomerID AND Z.ClosingBid IS NOT NULL AND Z.ClosingBid >= Z.Reserve GROUP BY C.CustomerID LIMIT 1");
 			
-			Customer customer = new Customer();
 			while (rs.next()) {
 				customer.setCustomerID(rs.getString("CustomerID"));
 				customer.setAddress(rs.getString("Address"));

@@ -1,5 +1,6 @@
 package dao;
 
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,11 +29,11 @@ public class ItemDao {
 			ResultSet rs = st.executeQuery("SELECT * FROM ItemData");
 			while (rs.next()) {
 				Item item = new Item();
-				item.setItemID(rs.getString("ItemID"));
+				item.setItemID(rs.getInt("ItemID"));
 				item.setDescription(rs.getString("ItemDescription"));
 				item.setType(rs.getString("ItemType"));
 				item.setName(rs.getString("ItemName"));
-				item.setNumCopies(rs.getString("AmountInStock"));
+				item.setNumCopies(rs.getInt("AmountInStock"));
 				items.add(item);
 			}
 		} catch(Exception e) {
@@ -59,11 +60,11 @@ public class ItemDao {
 			ResultSet rs = st.executeQuery("SELECT I.ItemName, COUNT(A.ItemID) as AmountSold FROM AuctionData A, ItemData I WHERE I.ItemID = A.ItemID AND A.ClosingBid IS NOT NULL AND A.ClosingBid >= A.Reserve GROUP BY A.ItemID ORDER BY COUNT(ItemID) DESC LIMIT 10");
 			while (rs.next()) {
 				Item item = new Item();
-				item.setItemID(rs.getString("ItemID"));
+				item.setItemID(rs.getInt("ItemID"));
 				item.setDescription(rs.getString("ItemDescription"));
 				item.setType(rs.getString("ItemType"));
 				item.setName(rs.getString("ItemName"));
-				item.setNumCopies(rs.getString("AmountInStock"));
+				item.setNumCopies(rs.getInt("AmountInStock"));
 				items.add(item);
 			}
 		} catch(Exception e) {
@@ -92,7 +93,7 @@ public class ItemDao {
 			while (rs.next()) {
 				Item item = new Item();
 				item.setName(rs.getString("ItemName"));
-				item.setSoldPrice(rs.getString("Profits"));
+				item.setSoldPrice(rs.getInt("Profits"));
 				items.add(item);
 			}
 		} catch(Exception e) {
@@ -120,11 +121,11 @@ public class ItemDao {
 			ResultSet rs = st.executeQuery("SELECT I.* FROM ItemData I WHERE I.ItemType IN (SELECT DISTINCT I.ItemType FROM ItemData I WHERE I.ItemID IN (SELECT DISTINCT I.ItemID FROM AuctionData A, ItemData I WHERE A.BuyerID = '" + customerID + "' AND A.ItemID = I.ItemID))");
 			while (rs.next()) {
 				Item item = new Item();
-				item.setItemID(rs.getString("ItemID"));
+				item.setItemID(rs.getInt("ItemID"));
 				item.setDescription(rs.getString("ItemDescription"));
 				item.setType(rs.getString("ItemType"));
 				item.setName(rs.getString("ItemName"));
-				item.setNumCopies(rs.getString("AmountInStock"));
+				item.setNumCopies(rs.getInt("AmountInStock"));
 				items.add(item);
 			}
 		} catch(Exception e) {
@@ -161,7 +162,7 @@ public class ItemDao {
 			ResultSet rs = st.executeQuery("SELECT A.*, I.*, B.* FROM AuctionData A, ItemData I, Bid B WHERE A.SellerID = '" + sellerID + "' AND A.ItemID = I.ItemID AND B.AuctionID = A.AuctionID");
 			while (rs.next()) {
 				Item item = new Item();
-				item.setItemID(rs.getString("ItemID"));
+				item.setItemID(rs.getInt("ItemID"));
 				item.setDescription(rs.getString("ItemDescription"));
 				item.setType(rs.getString("ItemType"));
 				item.setName(rs.getString("ItemName"));
@@ -169,13 +170,13 @@ public class ItemDao {
 				
 				Bid bid = new Bid();
 				bid.setCustomerID(rs.getString("BuyerID"));
-				bid.setBidPrice(rs.getString("CurrentBid"));
+				bid.setBidPrice(rs.getInt("CurrentBid"));
 				bids.add(bid);
 				
 				Auction auction = new Auction();
-				auction.setMinimumBid(rs.getString("Reserve"));
-				auction.setBidIncrement(rs.getString("Increment"));
-				auction.setAuctionID(rs.getString("AuctionID"));
+				auction.setMinimumBid(rs.getInt("Reserve"));
+				auction.setBidIncrement(rs.getInt("Increment"));
+				auction.setAuctionID(rs.getInt("AuctionID"));
 				auctions.add(auction);
 			}
 		} catch(Exception e) {
@@ -240,15 +241,15 @@ public class ItemDao {
 			ResultSet rs = st.executeQuery("SELECT I.*, A.* FROM ItemData I, AuctionData A WHERE I.ItemID = A.ItemID AND I.ItemName = '" + itemName + "'");
 			while (rs.next()) {
 				Item item = new Item();
-				item.setItemID(rs.getString("ItemID"));
+				item.setItemID(rs.getInt("ItemID"));
 				item.setDescription(rs.getString("ItemDescription"));
 				item.setType(rs.getString("ItemType"));
 				item.setName(rs.getString("ItemName"));
 				items.add(item);
 				
 				Auction auction = new Auction();
-				auction.setMinimumBid(rs.getString("Rserve"));
-				auction.setBidIncrement(rs.getString("Increment"));
+				auction.setMinimumBid(rs.getInt("Reserve"));
+				auction.setBidIncrement(rs.getInt("Increment"));
 				auctions.add(auction);
 			}
 		} catch(Exception e) {
@@ -284,15 +285,15 @@ public class ItemDao {
 			ResultSet rs = st.executeQuery("SELECT I.*, A.* FROM ItemData I, AuctionData A WHERE I.ItemType LIKE '%" + itemType + "%' AND I.ItemID = A.ItemID");
 			while (rs.next()) {
 				Item item = new Item();
-				item.setItemID(rs.getString("ItemID"));
+				item.setItemID(rs.getInt("ItemID"));
 				item.setDescription(rs.getString("ItemDescription"));
 				item.setType(rs.getString("ItemType"));
 				item.setName(rs.getString("ItemName"));
 				items.add(item);
 				
 				Auction auction = new Auction();
-				auction.setMinimumBid(rs.getString("Reserve"));
-				auction.setBidIncrement(rs.getString("Increment"));
+				auction.setMinimumBid(rs.getInt("Reserve"));
+				auction.setBidIncrement(rs.getInt("Increment"));
 				auctions.add(auction);
 			}
 		} catch(Exception e) {
@@ -323,13 +324,13 @@ public class ItemDao {
 			ResultSet rs = st.executeQuery("SELECT I.ItemID, I.ItemName, I.ItemDescription, I.ItemType, I.AmountInStock, COUNT(A.ItemID) AS AmountSold FROM AuctionData A, ItemData I WHERE A.SellerID = '" + customerID + "' AND I.ItemID = A.ItemID GROUP BY A.ItemID ORDER BY AmountSold DESC");
 			while (rs.next()) {
 				Item item = new Item();
-				item.setItemID(rs.getString("ItemID"));
+				item.setItemID(rs.getInt("ItemID"));
 				item.setDescription(rs.getString("ItemDescription"));
 				item.setType(rs.getString("ItemType"));
 				item.setName(rs.getString("ItemName"));
 				// TODO: 
 				// this might need to be AmountInStock
-				item.setNumCopies(rs.getString("AmountSold")); 
+				item.setNumCopies(rs.getInt("AmountSold")); 
 				items.add(item);
 			}
 		} catch(Exception e) {

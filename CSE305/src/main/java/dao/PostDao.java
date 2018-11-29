@@ -1,5 +1,7 @@
 package dao;
 
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,10 +35,10 @@ public class PostDao {
 			while (rs.next()) {
 				Item item = new Item();
 				item.setName(rs.getString("Name"));
-				item.setItemID(rs.getString("ItemID"));
+				item.setItemID(rs.getInt("ItemID"));
 				item.setType(rs.getString("ItemType"));
-				item.setNumCopies(rs.getString("CopiesSold"));
-				item.setYearManufactured(rs.getString("YearManufactured"));
+				item.setNumCopies(rs.getInt("CopiesSold"));
+				item.setYearManufactured(rs.getInt("YearManufactured"));
 				items.add(item);
 			}
 		} catch(Exception e) {

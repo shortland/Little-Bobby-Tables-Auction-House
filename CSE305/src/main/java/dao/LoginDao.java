@@ -1,5 +1,6 @@
 package dao;
 
+import java.sql.*;
 import model.Login;
 
 public class LoginDao {
@@ -17,13 +18,13 @@ public class LoginDao {
 		 * password, which is the password of the user, is given as method parameter
 		 * Query to verify the username and password and fetch the role of the user, must be implemented
 		 */
-		
+		String authorizationLevel ="";
+
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
 			ResultSet rs = st.executeQuery("(SELECT AuthorizationLevel FROM CustomerData WHERE EmailAddress = '" + username + "' AND Password = '" + password + "') UNION (SELECT AuthorizationLevel FROM EmployeeData WHERE EmailAddress = '" + username + "' AND Password = '" + password + "')");
-			String authorizationLevel;
 			while (rs.next()) {
 				authorizationLevel = rs.getString("Name");
 			}
