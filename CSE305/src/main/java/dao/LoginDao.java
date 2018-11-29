@@ -18,7 +18,7 @@ public class LoginDao {
 		 * password, which is the password of the user, is given as method parameter
 		 * Query to verify the username and password and fetch the role of the user, must be implemented
 		 */
-		String authorizationLevel ="";
+		String authorizationLevel = null;
 
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -26,7 +26,7 @@ public class LoginDao {
 			Statement st = con.createStatement();
 			ResultSet rs = st.executeQuery("(SELECT AuthorizationLevel FROM CustomerData WHERE EmailAddress = '" + username + "' AND Password = '" + password + "') UNION (SELECT AuthorizationLevel FROM EmployeeData WHERE EmailAddress = '" + username + "' AND Password = '" + password + "')");
 			while (rs.next()) {
-				authorizationLevel = rs.getString("Name");
+				authorizationLevel = rs.getString("AuthorizationLevel");
 			}
 		} catch(Exception e) {
 			System.out.println(e);
