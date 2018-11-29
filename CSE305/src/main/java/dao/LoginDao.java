@@ -18,7 +18,7 @@ public class LoginDao {
 		 * password, which is the password of the user, is given as method parameter
 		 * Query to verify the username and password and fetch the role of the user, must be implemented
 		 */
-		String authorizationLevel = null;
+		String authorizationLevel = "null";
 
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
