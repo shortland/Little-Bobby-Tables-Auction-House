@@ -67,15 +67,30 @@ public class CustomerDao {
 		 * The students code to fetch data from the database will be written here
 		 * The customer record is required to be encapsulated as a "Customer" class object
 		 */
-
-
-		/*Sample data begins*/
-		Customer customer = new Customer();
-		customer.setCustomerID("111-11-1111");
-		customer.setLastName("Lu");
-		customer.setFirstName("Shiyong");
-		customer.setEmail("shiyong@cs.sunysb.edu");
-		/*Sample data ends*/
+		
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("select * from CustomerData where FirstName like \'%" + searchKeyword +"%\'" + "or LastName like \'%" + searchKeyword + "%\'");
+			
+			Customer customer = new Customer();
+			while (rs.next()) {
+				customer.setCustomerID(rs.getString("CustomerID"));
+				customer.setAddress(rs.getString("Address"));
+				customer.setLastName(rs.getString("LastName"));
+				customer.setFirstName(rs.getString("FirstName"));
+				customer.setCity(rs.getString("City"));
+				customer.setState(rs.getString("State"));
+				customer.setEmail(rs.getString("EmailAddress"));
+				customer.setZipCode(rs.getInt("ZipCode"));
+				customer.setTelephone(rs.getString("Telephone"));
+				customer.setCreditCard(rs.getString("CreditCard"));
+				customer.setRating(rs.getInt("Rating"));
+			}
+		} catch(Exception e) {
+			System.out.println(e);
+		}
 	
 		return customer;
 		
