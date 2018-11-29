@@ -22,16 +22,26 @@ public class PostDao {
 		 */
 
 		List<Item> items = new ArrayList<Item>();
-				
-		/*Sample data begins*/
-		for (int i = 0; i < 10; i++) {
-			Item item = new Item();
-			item.setName("Sample item");
-			item.setSoldPrice(100);
-			items.add(item);
-		}
-		/*Sample data ends*/
-		
+		String[] dateData = post.getExpireDate().split("-");
+
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			//ResultSet rs = st.executeQuery("select * from CustomerData where FirstName like \'%" + searchKeyword +"%\'" + "or LastName like \'%" + searchKeyword + "%\'");
+			ResultSet rs = st.executeQuery("SELECT * FROM ItemData WHERE MONTH(CloseDate) = " + dateData[1] + " AND YEAR(CloseDate) = " + dateData[0]);
+			while (rs.next()) {
+				Item item = new Item();
+				item.setName(rs.getString("Name"));
+				item.setItemID(rs.getString("ItemID"));
+				item.setType(rs.getString("ItemType"));
+				item.setNumCopies(rs.getString("CopiesSold"));
+				item.setYearManufactured(rs.getString("YearManufactured"));
+				items.add(item);
+			}
+		} catch(Exception e) {
+			System.out.println(e);
+		}		
 
 		return items;
 		
