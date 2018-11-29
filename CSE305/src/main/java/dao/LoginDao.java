@@ -18,12 +18,22 @@ public class LoginDao {
 		 * Query to verify the username and password and fetch the role of the user, must be implemented
 		 */
 		
-		/*Sample data begins*/
-		Login login = new Login();
-		login.setRole("customerRepresentative");
-		return login;
-		/*Sample data ends*/
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("(SELECT AuthorizationLevel FROM CustomerData WHERE EmailAddress = '" + username + "' AND Password = '" + password + "') UNION (SELECT AuthorizationLevel FROM EmployeeData WHERE EmailAddress = '" + username + "' AND Password = '" + password + "')");
+			String authorizationLevel;
+			while (rs.next()) {
+				authorizationLevel = rs.getString("Name");
+			}
+		} catch(Exception e) {
+			System.out.println(e);
+		}
 		
+		Login login = new Login();
+		login.setRole(authorizationLevel);
+		return login;
 	}
 	
 	public String addUser(Login login) {
@@ -36,9 +46,24 @@ public class LoginDao {
 		 * Return "failure" for an unsuccessful database operation
 		 */
 		
-		/*Sample data begins*/
+		String table;
+		if ((login.getRole()).equals("customer")) {
+			table = "CustomerData";
+		}
+		else {
+			table = "EmployeeData";
+		}
+
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("INSERT INTO " + table + " (EmailAddress, Password) VALUES ('" + login.getUsername() + "', '" + login.getPassword() + "')");
+		} catch(Exception e) {
+			System.out.println(e);
+		}
+
 		return "success";
-		/*Sample data ends*/
 	}
 
 }

@@ -20,21 +20,26 @@ public class ItemDao {
 		 */
 
 		List<Item> items = new ArrayList<Item>();
-				
-		/*Sample data begins*/
-		for (int i = 0; i < 10; i++) {
-			Item item = new Item();
-			item.setItemID(123);
-			item.setDescription("sample description");
-			item.setType("BOOK");
-			item.setName("Sample Book");
-			item.setNumCopies(2);
-			items.add(item);
+		
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("SELECT * FROM ItemData");
+			while (rs.next()) {
+				Item item = new Item();
+				item.setItemID(rs.getString("ItemID"));
+				item.setDescription(rs.getString("ItemDescription"));
+				item.setType(rs.getString("ItemType"));
+				item.setName(rs.getString("ItemName"));
+				item.setNumCopies(rs.getString("AmountInStock"));
+				items.add(item);
+			}
+		} catch(Exception e) {
+			System.out.println(e);
 		}
-		/*Sample data ends*/
 		
 		return items;
-
 	}
 	
 	public List<Item> getBestsellerItems() {
@@ -46,22 +51,26 @@ public class ItemDao {
 		 */
 
 		List<Item> items = new ArrayList<Item>();
-		
-		
-		/*Sample data begins*/
-		for (int i = 0; i < 5; i++) {
-			Item item = new Item();
-			item.setItemID(123);
-			item.setDescription("sample description");
-			item.setType("BOOK");
-			item.setName("Sample Book");
-			item.setNumCopies(2);
-			items.add(item);
+
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("SELECT I.ItemName, COUNT(A.ItemID) as AmountSold FROM AuctionData A, ItemData I WHERE I.ItemID = A.ItemID AND A.ClosingBid IS NOT NULL AND A.ClosingBid >= A.Reserve GROUP BY A.ItemID ORDER BY COUNT(ItemID) DESC LIMIT 10");
+			while (rs.next()) {
+				Item item = new Item();
+				item.setItemID(rs.getString("ItemID"));
+				item.setDescription(rs.getString("ItemDescription"));
+				item.setType(rs.getString("ItemType"));
+				item.setName(rs.getString("ItemName"));
+				item.setNumCopies(rs.getString("AmountInStock"));
+				items.add(item);
+			}
+		} catch(Exception e) {
+			System.out.println(e);
 		}
-		/*Sample data ends*/
 		
 		return items;
-
 	}
 
 	public List<Item> getSummaryListing(String searchKeyword) {
@@ -74,21 +83,23 @@ public class ItemDao {
 		 */
 
 		List<Item> items = new ArrayList<Item>();
-				
-		/*Sample data begins*/
-		for (int i = 0; i < 6; i++) {
-			Item item = new Item();
-			item.setItemID(123);
-			item.setDescription("sample description");
-			item.setType("BOOK");
-			item.setName("Sample Book");
-			item.setSoldPrice(150);
-			items.add(item);
+
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("SELECT I.ItemName, SUM(Z.ClosingBid) as Profits FROM AuctionData Z, ItemData I WHERE Z.ItemID = I.ItemID AND (I.ItemName = '"+searchKeyword+"' OR I.ItemType = '"+searchKeyword+"' OR I.PosterFirstName = '"+searchKeyword+"') AND Z.ClosingBid IS NOT NULL AND Z.ClosingBid >= Z.Reserve GROUP BY I.ItemName");
+			while (rs.next()) {
+				Item item = new Item();
+				item.setName(rs.getString("ItemName"));
+				item.setSoldPrice(rs.getString("Profits"));
+				items.add(item);
+			}
+		} catch(Exception e) {
+			System.out.println(e);
 		}
-		/*Sample data ends*/
 		
 		return items;
-
 	}
 
 	public List<Item> getItemSuggestions(String customerID) {
@@ -102,20 +113,25 @@ public class ItemDao {
 
 		List<Item> items = new ArrayList<Item>();
 		
-		/*Sample data begins*/
-		for (int i = 0; i < 4; i++) {
-			Item item = new Item();
-			item.setItemID(123);
-			item.setDescription("sample description");
-			item.setType("BOOK");
-			item.setName("Sample Book");
-			item.setNumCopies(2);
-			items.add(item);
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("SELECT I.* FROM ItemData I WHERE I.ItemType IN (SELECT DISTINCT I.ItemType FROM ItemData I WHERE I.ItemID IN (SELECT DISTINCT I.ItemID FROM AuctionData A, ItemData I WHERE A.BuyerID = '" + customerID + "' AND A.ItemID = I.ItemID))");
+			while (rs.next()) {
+				Item item = new Item();
+				item.setItemID(rs.getString("ItemID"));
+				item.setDescription(rs.getString("ItemDescription"));
+				item.setType(rs.getString("ItemType"));
+				item.setName(rs.getString("ItemName"));
+				item.setNumCopies(rs.getString("AmountInStock"));
+				items.add(item);
+			}
+		} catch(Exception e) {
+			System.out.println(e);
 		}
-		/*Sample data ends*/
 		
 		return items;
-
 	}
 
 	public List getItemsBySeller(String sellerID) {
@@ -138,27 +154,33 @@ public class ItemDao {
 		List<Bid> bids = new ArrayList<Bid>();
 		List<Auction> auctions = new ArrayList<Auction>();
 		
-		/*Sample data begins*/
-		for (int i = 0; i < 4; i++) {
-			Item item = new Item();
-			item.setItemID(123);
-			item.setDescription("sample description");
-			item.setType("BOOK");
-			item.setName("Sample Book");
-			items.add(item);
-			
-			Bid bid = new Bid();
-			bid.setCustomerID("123-12-1234");
-			bid.setBidPrice(120);
-			bids.add(bid);
-			
-			Auction auction = new Auction();
-			auction.setMinimumBid(100);
-			auction.setBidIncrement(10);
-			auction.setAuctionID(123);
-			auctions.add(auction);
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("SELECT A.*, I.*, B.* FROM AuctionData A, ItemData I, Bid B WHERE A.SellerID = '" + sellerID + "' AND A.ItemID = I.ItemID AND B.AuctionID = A.AuctionID");
+			while (rs.next()) {
+				Item item = new Item();
+				item.setItemID(rs.getString("ItemID"));
+				item.setDescription(rs.getString("ItemDescription"));
+				item.setType(rs.getString("ItemType"));
+				item.setName(rs.getString("ItemName"));
+				items.add(item);
+				
+				Bid bid = new Bid();
+				bid.setCustomerID(rs.getString("BuyerID"));
+				bid.setBidPrice(rs.getString("CurrentBid"));
+				bids.add(bid);
+				
+				Auction auction = new Auction();
+				auction.setMinimumBid(rs.getString("Reserve"));
+				auction.setBidIncrement(rs.getString("Increment"));
+				auction.setAuctionID(rs.getString("AuctionID"));
+				auctions.add(auction);
+			}
+		} catch(Exception e) {
+			System.out.println(e);
 		}
-		/*Sample data ends*/
 		
 		output.add(items);
 		output.add(bids);
@@ -177,14 +199,20 @@ public class ItemDao {
 		 */
 		
 		List<Item> items = new ArrayList<Item>();
-		
-		/*Sample data begins*/
-		for (int i = 0; i < 6; i++) {
-			Item item = new Item();
-			item.setType("BOOK");
-			items.add(item);
+
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("SELECT DISTINCT ItemType FROM ItemData");
+			while (rs.next()) {
+				Item item = new Item();
+				item.setType(rs.getString("ItemType"));
+				items.add(item);
+			}
+		} catch(Exception e) {
+			System.out.println(e);
 		}
-		/*Sample data ends*/
 		
 		return items;
 	}
@@ -205,21 +233,27 @@ public class ItemDao {
 		List<Item> items = new ArrayList<Item>();
 		List<Auction> auctions = new ArrayList<Auction>();
 		
-		/*Sample data begins*/
-		for (int i = 0; i < 4; i++) {
-			Item item = new Item();
-			item.setItemID(123);
-			item.setDescription("sample description");
-			item.setType("BOOK");
-			item.setName("Sample Book");
-			items.add(item);
-			
-			Auction auction = new Auction();
-			auction.setMinimumBid(100);
-			auction.setBidIncrement(10);
-			auctions.add(auction);
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("SELECT I.*, A.* FROM ItemData I, AuctionData A WHERE I.ItemID = A.ItemID AND I.ItemName = '" + itemName + "'");
+			while (rs.next()) {
+				Item item = new Item();
+				item.setItemID(rs.getString("ItemID"));
+				item.setDescription(rs.getString("ItemDescription"));
+				item.setType(rs.getString("ItemType"));
+				item.setName(rs.getString("ItemName"));
+				items.add(item);
+				
+				Auction auction = new Auction();
+				auction.setMinimumBid(rs.getString("Rserve"));
+				auction.setBidIncrement(rs.getString("Increment"));
+				auctions.add(auction);
+			}
+		} catch(Exception e) {
+			System.out.println(e);
 		}
-		/*Sample data ends*/
 		
 		output.add(items);
 		output.add(auctions);
@@ -243,21 +277,27 @@ public class ItemDao {
 		List<Item> items = new ArrayList<Item>();
 		List<Auction> auctions = new ArrayList<Auction>();
 				
-		/*Sample data begins*/
-		for (int i = 0; i < 4; i++) {
-			Item item = new Item();
-			item.setItemID(123);
-			item.setDescription("sample description");
-			item.setType("BOOK");
-			item.setName("Sample Book");
-			items.add(item);
-			
-			Auction auction = new Auction();
-			auction.setMinimumBid(100);
-			auction.setBidIncrement(10);
-			auctions.add(auction);
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("SELECT I.*, A.* FROM ItemData I, AuctionData A WHERE I.ItemType LIKE '%" + itemType + "%' AND I.ItemID = A.ItemID");
+			while (rs.next()) {
+				Item item = new Item();
+				item.setItemID(rs.getString("ItemID"));
+				item.setDescription(rs.getString("ItemDescription"));
+				item.setType(rs.getString("ItemType"));
+				item.setName(rs.getString("ItemName"));
+				items.add(item);
+				
+				Auction auction = new Auction();
+				auction.setMinimumBid(rs.getString("Reserve"));
+				auction.setBidIncrement(rs.getString("Increment"));
+				auctions.add(auction);
+			}
+		} catch(Exception e) {
+			System.out.println(e);
 		}
-		/*Sample data ends*/
 		
 		output.add(items);
 		output.add(auctions);
@@ -276,20 +316,27 @@ public class ItemDao {
 
 		List<Item> items = new ArrayList<Item>();
 				
-		/*Sample data begins*/
-		for (int i = 0; i < 6; i++) {
-			Item item = new Item();
-			item.setItemID(123);
-			item.setDescription("sample description");
-			item.setType("BOOK");
-			item.setName("Sample Book");
-			item.setNumCopies(50);
-			items.add(item);
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("SELECT I.ItemID, I.ItemName, I.ItemDescription, I.ItemType, I.AmountInStock, COUNT(A.ItemID) AS AmountSold FROM AuctionData A, ItemData I WHERE A.SellerID = '" + customerID + "' AND I.ItemID = A.ItemID GROUP BY A.ItemID ORDER BY AmountSold DESC");
+			while (rs.next()) {
+				Item item = new Item();
+				item.setItemID(rs.getString("ItemID"));
+				item.setDescription(rs.getString("ItemDescription"));
+				item.setType(rs.getString("ItemType"));
+				item.setName(rs.getString("ItemName"));
+				// TODO: 
+				// this might need to be AmountInStock
+				item.setNumCopies(rs.getString("AmountSold")); 
+				items.add(item);
+			}
+		} catch(Exception e) {
+			System.out.println(e);
 		}
-		/*Sample data ends*/
 		
 		return items;
-
 	}
 
 }
