@@ -20,6 +20,13 @@ public class Employee {
 	private String email;
 	private String telephone;
 	private String revenue;
+	private String SSN;
+	public String getSSN() {
+		return SSN;
+	}
+	public void setSSN(String SSN) {
+		this.SSN = SSN;
+	}
 	public String getRevenue() {
 		return revenue;
 	}
