@@ -35,7 +35,7 @@ public class CustomerDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("select * from CustomerData where FirstName like \'%" + searchKeyword +"%\'"
+			ResultSet rs = st.executeQuery("SELECT * FROM CustomerData WHERE FirstName like \'%" + searchKeyword +"%\'"
 					+ "or LastName like \'%" + searchKeyword + "%\'");
 			while (rs.next()) {
 				Customer customer = new Customer();
@@ -107,21 +107,25 @@ public class CustomerDao {
 		
 		List<Customer> customers = new ArrayList<Customer>();
 		
-		/*Sample data begins*/
-		for (int i = 0; i < 10; i++) {
-			Customer customer = new Customer();
-			customer.setCustomerID("111-11-1111");
-			customer.setAddress("123 Success Street");
-			customer.setLastName("Lu");
-			customer.setFirstName("Shiyong");
-			customer.setCity("Stony Brook");
-			customer.setState("NY");
-			customer.setEmail("shiyong@cs.sunysb.edu");
-			customer.setZipCode(11790);
-			customers.add(customer);			
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("SELECT * FROM CustomerData");
+			while(rs.next()) {
+				Customer customer = new Customer();
+				customer.setCustomerID(rs.getString("CustomerID"));
+				customer.setAddress(rs.getString("Address"));
+				customer.setLastName(rs.getString("LastName"));
+				customer.setFirstName(rs.getString("FirstName"));
+				customer.setCity(rs.getString("City"));
+				customer.setState(rs.getString("State"));
+				customer.setEmail(rs.getString("EmailAddress"));
+				customer.setZipCode(rs.getInt("ZipCode"));
+				customers.add(customer);		
+			}
+		}catch(Exception e) {
 		}
-		/*Sample data ends*/
-		
 		return customers;
 	}
 
@@ -187,8 +191,19 @@ public class CustomerDao {
 		 * username, which is the email address of the customer, who's ID has to be returned, is given as method parameter
 		 * The Customer's ID is required to be returned as a String
 		 */
-
-		return "111-11-1111";
+		String s="";
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			ResultSet rs=st.executeQuery("SELECT C.CustomerID FROM CustomerData C WHERE C.EmailAddress = \'"+username+"\'");
+			s=rs.getString("CustomerID");
+		}catch(Exception e) {
+		}
+		if(s.equals("")) {
+			return "";
+		}
+		return s;
 	}
 
 
@@ -201,26 +216,29 @@ public class CustomerDao {
 		 */
 
 		List<Customer> customers = new ArrayList<Customer>();
-		
-		/*Sample data begins*/
-		for (int i = 0; i < 10; i++) {
-			Customer customer = new Customer();
-			customer.setCustomerID("111-11-1111");
-			customer.setAddress("123 Success Street");
-			customer.setLastName("Lu");
-			customer.setFirstName("Shiyong");
-			customer.setCity("Stony Brook");
-			customer.setState("NY");
-			customer.setEmail("shiyong@cs.sunysb.edu");
-			customer.setZipCode(11790);
-			customers.add(customer);			
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			ResultSet rs=st.executeQuery("SELECT A.SellerID, C.* FROM AuctionData A, CustomerData C WHERE A.SellerID = C.CustomerID");
+			while(rs.next()) {
+				Customer customer = new Customer();
+				customer.setCustomerID(rs.getString("CustomerID"));
+				customer.setAddress(rs.getString("Address"));
+				customer.setLastName(rs.getString("LastName"));
+				customer.setFirstName(rs.getString("FirstName"));
+				customer.setCity(rs.getString("City"));
+				customer.setState(rs.getString("State"));
+				customer.setEmail(rs.getString("EmailAddress"));
+				customer.setZipCode(rs.getInt("ZipCode"));
+				customers.add(customer);	
+			}
+		}catch(Exception e) {
 		}
-		/*Sample data ends*/
 		
 		return customers;
 
 	}
-
 
 	public String addCustomer(Customer customer) {
 
@@ -231,12 +249,23 @@ public class CustomerDao {
 		 * The sample code returns "success" by default.
 		 * You need to handle the database insertion of the customer details and return "success" or "failure" based on result of the database insertion.
 		 */
-		
-		/*Sample data begins*/
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse?useSSL=false",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			String sql="INSERT INTO CustomerData (LastName, FirstName, Address, City,State, ZipCode, Telephone, EmailAddress, CreditCard, Rating)"+ " VALUES (\'"+customer.getLastName()+"\',\'"+customer.getFirstName()+"\',\'"+customer.getAddress()+"\',\'"+customer.getCity()+"\',\'"+customer.getState()+"\',\'"+Integer.toString(customer.getZipCode())+
+					"\',\'"+customer.getTelephone()+"\',\'"+customer.getEmail()+"\',\'"+customer.getCreditCard()+"\',\'"+ Integer.toString(customer.getRating())+"\')";
+			st.executeUpdate(sql);
+		}catch(SQLException e){
+			return "failure";
+		}catch(Exception e) {
+			return "failure";
+		}
 		return "success";
-		/*Sample data ends*/
 
 	}
+	/*String sql="INSERT INTO CustomerData (LastName, FirstName, Address, City, State, ZipCode, Telephone, EmailAddress, CreditCard, NumberItemsSold, ItemsPurchased, Rating, RatingAmount) VALUES ("+customer.getLastName()+","+customer.getFirstName()+","+customer.getAddress()+","+customer.getCity()+","+customer.getState()+","+customer.getZipCode()+
+	","+customer.getTelephone()+","+customer.getEmail()+","+customer.getCreditCard()+","+customer.getNumberItemsSold()+","+customer.getItemsPurchased()+","+ customer.getRating()+","+customer.getRatingAmount()+")";*/
 
 	public String editCustomer(Customer customer) {
 		/*
