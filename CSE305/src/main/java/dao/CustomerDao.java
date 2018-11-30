@@ -188,7 +188,20 @@ public class CustomerDao {
 		 * The Customer's ID is required to be returned as a String
 		 */
 
-		return "111-11-1111";
+		String customerID = "";
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("select CustomerID from CustomerData where EmailAddress = \'" + username +"\'");
+			while (rs.next()) {
+				customerID = (rs.getString("CustomerID"));
+			}
+		} catch(Exception e) {
+			System.out.println(e);
+		}
+				
+		return customerID;
 	}
 
 
