@@ -1,5 +1,6 @@
 package dao;
-
+//hi
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,25 +20,26 @@ public class AuctionDao {
 		 * Each record is required to be encapsulated as a "Auction" class object and added to the "auctions" ArrayList
 		 * Query to get data about all the auctions should be implemented
 		 */
-		
-		/*Sample data begins*/
-		for (int i = 0; i < 10; i++) {
-			Auction auction = new Auction();
-			auction.setAuctionID(1);
-			auction.setBidIncrement(10);
-			auction.setMinimumBid(10);
-			auction.setCopiesSold(12);
-			auction.setItemID(1234);
-			auction.setClosingBid(120);
-			auction.setCurrentBid(120);
-			auction.setCurrentHighBid(120);
-			auction.setReserve(10);
-			auctions.add(auction);
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("SELECT * FROM AuctionData");
+			while(rs.next()) {
+				Auction auction =new Auction();
+				auction.setAuctionID(rs.getInt("AuctionID"));
+				auction.setBidIncrement(rs.getInt("Increment"));
+				auction.setMinimumBid(rs.getInt("OpeningBid"));  //David: missing CopiesSold bcus we don't have it in the table
+				auction.setItemID(rs.getInt("ItemID"));
+				auction.setClosingBid(rs.getInt("ClosingBid"));
+				auction.setCurrentBid(rs.getInt("CurrentBid"));
+				auction.setCurrentHighBid(rs.getInt("CurrentHighBid"));
+				auction.setReserve(rs.getInt("Reserve"));
+				auctions.add(auction);
+			}
+		}catch(Exception e) {
 		}
-		/*Sample data ends*/
-		
 		return auctions;
-
 	}
 
 	public List<Auction> getAuctions(String customerID) {
@@ -52,21 +54,26 @@ public class AuctionDao {
 		 */
 		
 		/*Sample data begins*/
-		for (int i = 0; i < 5; i++) {
-			Auction auction = new Auction();
-			auction.setAuctionID(1);
-			auction.setBidIncrement(10);
-			auction.setMinimumBid(10);
-			auction.setCopiesSold(12);
-			auction.setItemID(1234);
-			auction.setClosingBid(120);
-			auction.setCurrentBid(120);
-			auction.setCurrentHighBid(120);
-			auction.setReserve(10);
-			auctions.add(auction);
-		}
-		/*Sample data ends*/
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("SELECT * FROM AuctionData A WHERE A.SellerID = \'"+ customerID+"\' OR A.BuyerID = \'"+customerID+"\'");
 		
+			while(rs.next()) {
+				Auction auction = new Auction();
+				auction.setAuctionID(rs.getInt("AuctionID"));
+				auction.setBidIncrement(rs.getInt("Increment"));
+				auction.setMinimumBid(rs.getInt("OpeningBid"));	//David: missing CopiesSold
+				auction.setItemID(rs.getInt("ItemID"));
+				auction.setClosingBid(rs.getInt("ClosingBid"));
+				auction.setCurrentBid(rs.getInt("CurrentBid"));
+				auction.setCurrentHighBid(rs.getInt("CurrentHighBid"));
+				auction.setReserve(rs.getInt("Reserve"));
+				auctions.add(auction);
+			}
+		}catch(Exception e) {
+		}
 		return auctions;
 
 	}
@@ -82,24 +89,26 @@ public class AuctionDao {
 		 */
 		
 		/*Sample data begins*/
-		for (int i = 0; i < 5; i++) {
-			Auction auction = new Auction();
-			auction.setAuctionID(1);
-			auction.setBidIncrement(10);
-			auction.setMinimumBid(10);
-			auction.setCopiesSold(12);
-			auction.setItemID(1234);
-			auction.setClosingBid(120);
-			auction.setCurrentBid(120);
-			auction.setCurrentHighBid(120);
-			auction.setReserve(10);
-			auctions.add(auction);
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("SELECT A.* FROM AuctionData A, EmployeeData E WHERE A.EmployeeID = E.EmployeeID AND E.EmailAddress =\'"+employeeEmail+"\'");
+			while(rs.next()) {
+				Auction auction = new Auction();
+				auction.setAuctionID(rs.getInt("AuctionID"));
+				auction.setBidIncrement(rs.getInt("Increment"));
+				auction.setMinimumBid(rs.getInt("OpeningBid"));	//David: missing CopiesSold
+				auction.setItemID(rs.getInt("ItemID"));
+				auction.setClosingBid(rs.getInt("ClosingBid"));
+				auction.setCurrentBid(rs.getInt("CurrentBid"));
+				auction.setCurrentHighBid(rs.getInt("CurrentHighBid"));
+				auction.setReserve(rs.getInt("Reserve"));
+				auctions.add(auction);
+			}
+		}catch(Exception e) {
 		}
-		/*Sample data ends*/
-		
 		return auctions;
-
-		
 		
 	}
 
@@ -138,7 +147,6 @@ public class AuctionDao {
 		 * The auction details must include details about the item, indicated by auctionID
 		 * All the objects must be added in the "output" list and returned
 		 */
-		
 		/*Sample data begins*/
 		for (int i = 0; i < 4; i++) {
 			item.setItemID(123);

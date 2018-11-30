@@ -25,13 +25,15 @@ public class PostDao {
 
 		List<Item> items = new ArrayList<Item>();
 		String[] dateData = post.getExpireDate().split("-");
+		String s= dateData[1]+"-"+dateData[0];
 
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
 			//ResultSet rs = st.executeQuery("select * from CustomerData where FirstName like \'%" + searchKeyword +"%\'" + "or LastName like \'%" + searchKeyword + "%\'");
-			ResultSet rs = st.executeQuery("SELECT * FROM ItemData WHERE MONTH(CloseDate) = " + dateData[1] + " AND YEAR(CloseDate) = " + dateData[0]);
+			//ResultSet rs = st.executeQuery("SELECT * FROM ItemData WHERE MONTH(CloseDate) = " + dateData[1] + " AND YEAR(CloseDate) = " + dateData[0]);
+			ResultSet rs=st.executeQuery("SELECT I.*, A.ClosingDate, A.ItemID FROM AuctionData A, ItemData I WHERE I.ItemID=A.ItemID AND A.ClosingDate like \'%"+s+"\'%");
 			while (rs.next()) {
 				Item item = new Item();
 				item.setName(rs.getString("Name"));
