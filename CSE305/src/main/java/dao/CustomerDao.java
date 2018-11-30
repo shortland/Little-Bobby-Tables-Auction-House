@@ -136,17 +136,30 @@ public class CustomerDao {
 		
 		/*Sample data begins*/
 		Customer customer = new Customer();
-		customer.setCustomerID("111-11-1111");
-		customer.setAddress("123 Success Street");
-		customer.setLastName("Lu");
-		customer.setFirstName("Shiyong");
-		customer.setCity("Stony Brook");
-		customer.setState("NY");
-		customer.setEmail("shiyong@cs.sunysb.edu");
-		customer.setZipCode(11790);
-		customer.setTelephone("5166328959");
-		customer.setCreditCard("1234567812345678");
-		customer.setRating(1);
+
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("select * from CustomerData where CustomerID = \'" + customerID +"\'");
+			while (rs.next()) {
+				customer.setCustomerID(rs.getString("CustomerID"));
+				customer.setAddress(rs.getString("Address"));
+				customer.setLastName(rs.getString("LastName"));
+				customer.setFirstName(rs.getString("FirstName"));
+				customer.setCity(rs.getString("City"));
+				customer.setState(rs.getString("State"));
+				customer.setEmail(rs.getString("EmailAddress"));
+				customer.setZipCode(rs.getInt("ZipCode"));
+				customer.setTelephone(rs.getString("Telephone"));
+				customer.setCreditCard(rs.getString("CreditCard"));
+				customer.setRating(rs.getInt("Rating"));
+			}
+		} catch(Exception e) {
+			System.out.println(e);
+		}
+		
+
 		/*Sample data ends*/
 		
 		return customer;
