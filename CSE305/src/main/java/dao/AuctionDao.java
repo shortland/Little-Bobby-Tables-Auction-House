@@ -148,34 +148,38 @@ public class AuctionDao {
 		 * All the objects must be added in the "output" list and returned
 		 */
 		/*Sample data begins*/
-		for (int i = 0; i < 4; i++) {
-			item.setItemID(123);
-			item.setDescription("sample description");
-			item.setType("BOOK");
-			item.setName("Sample Book");
-			
-			bid.setCustomerID("123-12-1234");
-			bid.setBidPrice(120);
-			
-			customer.setCustomerID("123-12-1234");
-			customer.setFirstName("Shiyong");
-			customer.setLastName("Lu");
-			
-			auction.setMinimumBid(100);
-			auction.setBidIncrement(10);
-			auction.setCurrentBid(110);
-			auction.setCurrentHighBid(115);
-			auction.setAuctionID(Integer.parseInt(auctionID));
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			ResultSet rs=st.executeQuery("SELECT I.*, B.*, C.*, A.* FROM ItemData I, Bid B, AuctionData A, CustomerData C WHERE A.ItemID = I.ItemID AND B.AuctionID= A.AuctionID AND B.CustomerID = C.CustomerID AND A.BuyerID= C.CustomerID");
+			while(rs.next()) {
+				item.setItemID(rs.getInt("ItemID"));
+				item.setDescription(rs.getString("ItemDescription"));
+				item.setType(rs.getString("ItemType"));
+				item.setName(rs.getString("ItemName"));
+				
+				bid.setCustomerID(Integer.toString(rs.getInt("CustomerID")));
+				bid.setBidPrice(rs.getFloat("Value"));
+				
+				customer.setCustomerID(Integer.toString(rs.getInt("CustomerID")));
+				customer.setFirstName(rs.getString("FirstName"));
+				customer.setLastName(rs.getString("LastName"));
+				
+				auction.setMinimumBid(rs.getInt("OpeningBid"));
+				auction.setBidIncrement(rs.getInt("Increment"));
+				auction.setCurrentBid(rs.getInt("CurrentBid"));
+				auction.setCurrentHighBid(rs.getInt("CurrentHighBid"));
+				auction.setAuctionID(rs.getInt("AuctionID"));
+			}
+			output.add(item);
+			output.add(bid);
+			output.add(auction);
+			output.add(customer);
+		}catch(Exception e) {
+			System.out.println(e);
 		}
-		/*Sample data ends*/
-		
-		output.add(item);
-		output.add(bid);
-		output.add(auction);
-		output.add(customer);
-		
 		return output;
-
 	}
 
 	
