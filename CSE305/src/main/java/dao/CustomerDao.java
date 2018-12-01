@@ -181,15 +181,15 @@ public class CustomerDao {
 		
 		//David Haven't test the DELETE yet. Not sure if this way works.
 		
-		/*try {
+		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			int x= st.executeUpdate("DELETE CustomerData WHERE CustomerID= \'"+customerID+"\'");
+			st.executeUpdate("DELETE CustomerData WHERE CustomerID= \'"+customerID+"\'");
 		}catch(Exception e) {
 			System.out.println(e);
 			return "failure";
-		}*/
+		}
 
 		//David Check commit
 		return "success";
