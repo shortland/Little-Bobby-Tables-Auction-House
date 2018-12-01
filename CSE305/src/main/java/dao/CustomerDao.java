@@ -178,10 +178,21 @@ public class CustomerDao {
 		 * The students code to delete the data from the database will be written here
 		 * customerID, which is the Customer's ID who's details have to be deleted, is given as method parameter
 		 */
+		
+		//David Haven't test the DELETE yet. Not sure if this way works.
+		
+		/*try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			int x= st.executeUpdate("DELETE CustomerData WHERE CustomerID= \'"+customerID+"\'");
+		}catch(Exception e) {
+			System.out.println(e);
+			return "failure";
+		}*/
 
-		/*Sample data begins*/
 		return "success";
-		/*Sample data ends*/
+
 		
 	}
 
@@ -220,21 +231,26 @@ public class CustomerDao {
 		 */
 
 		List<Customer> customers = new ArrayList<Customer>();
-		
-		/*Sample data begins*/
-		for (int i = 0; i < 10; i++) {
-			Customer customer = new Customer();
-			customer.setCustomerID("111-11-1111");
-			customer.setAddress("123 Success Street");
-			customer.setLastName("Lu");
-			customer.setFirstName("Shiyong");
-			customer.setCity("Stony Brook");
-			customer.setState("NY");
-			customer.setEmail("shiyong@cs.sunysb.edu");
-			customer.setZipCode(11790);
-			customers.add(customer);			
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			ResultSet rs= st.executeQuery("SELECT C.* FROM CustomerData C, AuctionData A WHERE C.CustomerID= A.SellerID");
+			while(rs.next()) {
+				Customer customer = new Customer();
+				customer.setCustomerID(Integer.toString(rs.getInt("CustomerID")));
+				customer.setAddress(rs.getString("Address"));
+				customer.setLastName(rs.getString("LastName"));
+				customer.setFirstName(rs.getString("FirstName"));
+				customer.setCity(rs.getString("City"));
+				customer.setState(rs.getString("State"));
+				customer.setEmail(rs.getString("EmailAddress"));
+				customer.setZipCode(rs.getInt("ZipCode"));
+				customers.add(customer);
+			}
+		}catch(Exception e) {
+			System.out.println(e);
 		}
-		/*Sample data ends*/
 		
 		return customers;
 
