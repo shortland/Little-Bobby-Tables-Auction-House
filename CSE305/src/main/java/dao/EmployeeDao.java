@@ -2,6 +2,7 @@ package dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.sql.*;
 
 import model.Customer;
 import model.Employee;
@@ -21,10 +22,34 @@ public class EmployeeDao {
 		 * You need to handle the database insertion of the employee details and return "success" or "failure" based on result of the database insertion.
 		 */
 		
-		/*Sample data begins*/
-		return "success";
-		/*Sample data ends*/
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			String query = "INSERT INTO EmployeeData (Address, AuthorizationLevel, City, EmailAddress, FirstName, HourlyRate, LastName, Password, SocialSecurity, StartDate, State, Telephone, ZipCode) "
+				+ "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			PreparedStatement preparedStmt = con.prepareStatement(query);
+			preparedStmt.setString (1, employee.getAddress());
+			// TODO: 
+			// Is this always going to be a customerRepresentative? Or can it be a manager?
+			preparedStmt.setString (2, "customerRepresentative");
+			preparedStmt.setString (3, employee.getCity());
+			preparedStmt.setString (4, employee.getEmail());
+			preparedStmt.setString (5, employee.getFirstName());
+			preparedStmt.setString (6, "" + employee.getHourlyRate());
+			preparedStmt.setString (7, employee.getLastName());
+			preparedStmt.setString (8, employee.getPassword());
+			preparedStmt.setString (9, employee.getEmployeeID());
+			preparedStmt.setString (10, employee.getStartDate());
+			preparedStmt.setString (11, employee.getState());
+			preparedStmt.setString (12, employee.getTelephone());
+			preparedStmt.setString (13, "" + employee.getZipCode());
+			preparedStmt.execute();
+		} catch(Exception e) {
+			System.out.println(e);
+			return "error";
+		}
 
+		return "success";
 	}
 
 	public String editEmployee(Employee employee) {
