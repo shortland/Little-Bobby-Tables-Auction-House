@@ -26,7 +26,7 @@ public class EmployeeDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			String query = "INSERT INTO EmployeeData (Address, AuthorizationLevel, City, EmailAddress, FirstName, HourlyRate, LastName, Password, SocialSecurity, StartDate, State, Telephone, ZipCode) "
-				+ "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			preparedStmt.setString (1, employee.getAddress());
 			// TODO: 
@@ -61,10 +61,34 @@ public class EmployeeDao {
 		 * You need to handle the database update and return "success" or "failure" based on result of the database update.
 		 */
 		
-		/*Sample data begins*/
-		return "success";
-		/*Sample data ends*/
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			String query = "UPDATE EmployeeData SET Address = ?, AuthorizationLevel = ?, City = ?, EmailAddress = ?, FirstName = ?, HourlyRate = ?, LastName = ?, Password = ?, SocialSecurity = ?, StartDate = ?, State = ?, Telephone = ?, ZipCode = ? WHERE SocialSecurity = ?";
+			PreparedStatement preparedStmt = con.prepareStatement(query);
+			preparedStmt.setString (1, employee.getAddress());
+			// TODO: 
+			// Is this always going to be a customerRepresentative? Or can it be a manager?
+			preparedStmt.setString (2, "customerRepresentative");
+			preparedStmt.setString (3, employee.getCity());
+			preparedStmt.setString (4, employee.getEmail());
+			preparedStmt.setString (5, employee.getFirstName());
+			preparedStmt.setString (6, "" + employee.getHourlyRate());
+			preparedStmt.setString (7, employee.getLastName());
+			preparedStmt.setString (8, employee.getPassword());
+			preparedStmt.setString (9, employee.getEmployeeID());
+			preparedStmt.setString (10, employee.getStartDate());
+			preparedStmt.setString (11, employee.getState());
+			preparedStmt.setString (12, employee.getTelephone());
+			preparedStmt.setString (13, "" + employee.getZipCode());
+			preparedStmt.setString (13, employee.getEmployeeID());
+			preparedStmt.execute();
+		} catch(Exception e) {
+			System.out.println(e);
+			return "error";
+		}
 
+		return "success";
 	}
 
 	public String deleteEmployee(String employeeID) {
@@ -74,10 +98,19 @@ public class EmployeeDao {
 		 * You need to handle the database deletion and return "success" or "failure" based on result of the database deletion.
 		 */
 		
-		/*Sample data begins*/
-		return "success";
-		/*Sample data ends*/
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			String query = "DELETE FROM EmployeeData WHERE SocialSecurity = ?";
+			PreparedStatement preparedStmt = con.prepareStatement(query);
+			preparedStmt.setString (1, employeeID);
+			preparedStmt.execute();
+		} catch(Exception e) {
+			System.out.println(e);
+			return "error";
+		}
 
+		return "success";
 	}
 
 	
