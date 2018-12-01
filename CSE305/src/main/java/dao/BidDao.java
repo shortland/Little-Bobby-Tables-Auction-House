@@ -1,5 +1,9 @@
 package dao;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,18 +22,22 @@ public class BidDao {
 		 * auctionID, which is the Auction's ID, is given as method parameter
 		 * Query to get the bid history of an auction, indicated by auctionID, must be implemented
 		 */
-
-		/*Sample data begins*/
-		for (int i = 0; i < 10; i++) {
-			Bid bid = new Bid();
-			bid.setAuctionID(123);
-			bid.setCustomerID("123-12-1234");
-			bid.setBidTime("2008-12-11");
-			bid.setBidPrice(100);
-			bids.add(bid);			
-		}
-		/*Sample data ends*/
-		
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			ResultSet rs=st.executeQuery("SELECT * FROM Bid WHERE auctionID =\'"+auctionID+"\'");
+			while(rs.next()) {
+				Bid bid = new Bid();
+				bid.setAuctionID(rs.getInt("AuctionID"));
+				bid.setCustomerID(Integer.toString(rs.getInt("CustomerID")));
+				bid.setBidTime(rs.getString("Time"));
+				bid.setBidPrice(rs.getFloat("Value"));
+				bids.add(bid);		
+			}
+		}catch(Exception e) {
+			System.out.println(e);
+		}		
 		return bids;
 	}
 
@@ -43,17 +51,22 @@ public class BidDao {
 		 * customerID, which is the Customer's ID, is given as method parameter
 		 * Query to get the bid history of all the auctions in which a customer participated, indicated by customerID, must be implemented
 		 */
-
-		/*Sample data begins*/
-		for (int i = 0; i < 10; i++) {
-			Bid bid = new Bid();
-			bid.setAuctionID(123);
-			bid.setCustomerID("123-12-1234");
-			bid.setBidTime("2008-12-11");
-			bid.setBidPrice(100);
-			bids.add(bid);			
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			ResultSet rs= st.executeQuery("SELECT* FROM Bid WHERE CustomerID =\'"+customerID+"\'");
+			while(rs.next()) {
+				Bid bid = new Bid();
+				bid.setAuctionID(rs.getInt("AuctionID"));
+				bid.setCustomerID(Integer.toString(rs.getInt("CustomerID")));
+				bid.setBidTime(rs.getString("Time"));
+				bid.setBidPrice(rs.getFloat("Value"));
+				bids.add(bid);	
+			}
+		}catch(Exception e) {
+			System.out.println(e);
 		}
-		/*Sample data ends*/
 		
 		return bids;
 	}
