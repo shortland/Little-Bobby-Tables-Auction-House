@@ -20,12 +20,20 @@ public class Employee {
 	private String email;
 	private String telephone;
 	private String revenue;
-	private String SSN;
-	public String getSSN() {
-		return SSN;
+	private String password;
+	private String role;
+
+	public String getRole() {
+		return role;
 	}
-	public void setSSN(String SSN) {
-		this.SSN = SSN;
+	public void setRole(String role) {
+		this.role = role;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	public String getRevenue() {
 		return revenue;
@@ -105,6 +113,4 @@ public class Employee {
 	public void setTelephone(String telephone) {
 		this.telephone = telephone;
 	}
-	
-
 }

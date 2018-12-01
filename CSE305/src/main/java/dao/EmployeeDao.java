@@ -2,6 +2,7 @@ package dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.sql.*;
 
 import model.Customer;
 import model.Employee;
@@ -21,10 +22,34 @@ public class EmployeeDao {
 		 * You need to handle the database insertion of the employee details and return "success" or "failure" based on result of the database insertion.
 		 */
 		
-		/*Sample data begins*/
-		return "success";
-		/*Sample data ends*/
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			String query = "INSERT INTO EmployeeData (Address, AuthorizationLevel, City, EmailAddress, FirstName, HourlyRate, LastName, Password, SocialSecurity, StartDate, State, Telephone, ZipCode) "
+				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			PreparedStatement preparedStmt = con.prepareStatement(query);
+			preparedStmt.setString (1, employee.getAddress());
+			// TODO: 
+			// Is this always going to be a customerRepresentative? Or can it be a manager?
+			preparedStmt.setString (2, "customerRepresentative");
+			preparedStmt.setString (3, employee.getCity());
+			preparedStmt.setString (4, employee.getEmail());
+			preparedStmt.setString (5, employee.getFirstName());
+			preparedStmt.setString (6, "" + employee.getHourlyRate());
+			preparedStmt.setString (7, employee.getLastName());
+			preparedStmt.setString (8, employee.getPassword());
+			preparedStmt.setString (9, employee.getEmployeeID());
+			preparedStmt.setString (10, employee.getStartDate());
+			preparedStmt.setString (11, employee.getState());
+			preparedStmt.setString (12, employee.getTelephone());
+			preparedStmt.setString (13, "" + employee.getZipCode());
+			preparedStmt.execute();
+		} catch(Exception e) {
+			System.out.println(e);
+			return "error";
+		}
 
+		return "success";
 	}
 
 	public String editEmployee(Employee employee) {
@@ -36,10 +61,34 @@ public class EmployeeDao {
 		 * You need to handle the database update and return "success" or "failure" based on result of the database update.
 		 */
 		
-		/*Sample data begins*/
-		return "success";
-		/*Sample data ends*/
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			String query = "UPDATE EmployeeData SET Address = ?, AuthorizationLevel = ?, City = ?, EmailAddress = ?, FirstName = ?, HourlyRate = ?, LastName = ?, Password = ?, SocialSecurity = ?, StartDate = ?, State = ?, Telephone = ?, ZipCode = ? WHERE SocialSecurity = ?";
+			PreparedStatement preparedStmt = con.prepareStatement(query);
+			preparedStmt.setString (1, employee.getAddress());
+			// TODO: 
+			// Is this always going to be a customerRepresentative? Or can it be a manager?
+			preparedStmt.setString (2, "customerRepresentative");
+			preparedStmt.setString (3, employee.getCity());
+			preparedStmt.setString (4, employee.getEmail());
+			preparedStmt.setString (5, employee.getFirstName());
+			preparedStmt.setString (6, "" + employee.getHourlyRate());
+			preparedStmt.setString (7, employee.getLastName());
+			preparedStmt.setString (8, employee.getPassword());
+			preparedStmt.setString (9, employee.getEmployeeID());
+			preparedStmt.setString (10, employee.getStartDate());
+			preparedStmt.setString (11, employee.getState());
+			preparedStmt.setString (12, employee.getTelephone());
+			preparedStmt.setString (13, "" + employee.getZipCode());
+			preparedStmt.setString (13, employee.getEmployeeID());
+			preparedStmt.execute();
+		} catch(Exception e) {
+			System.out.println(e);
+			return "error";
+		}
 
+		return "success";
 	}
 
 	public String deleteEmployee(String employeeID) {
@@ -49,10 +98,19 @@ public class EmployeeDao {
 		 * You need to handle the database deletion and return "success" or "failure" based on result of the database deletion.
 		 */
 		
-		/*Sample data begins*/
-		return "success";
-		/*Sample data ends*/
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			String query = "DELETE FROM EmployeeData WHERE SocialSecurity = ?";
+			PreparedStatement preparedStmt = con.prepareStatement(query);
+			preparedStmt.setString (1, employeeID);
+			preparedStmt.execute();
+		} catch(Exception e) {
+			System.out.println(e);
+			return "error";
+		}
 
+		return "success";
 	}
 
 	
@@ -66,23 +124,29 @@ public class EmployeeDao {
 
 		List<Employee> employees = new ArrayList<Employee>();
 		
-		/*Sample data begins*/
-		for (int i = 0; i < 10; i++) {
-			Employee employee = new Employee();
-			employee.setEmail("shiyong@cs.sunysb.edu");
-			employee.setFirstName("Shiyong");
-			employee.setLastName("Lu");
-			employee.setAddress("123 Success Street");
-			employee.setCity("Stony Brook");
-			employee.setStartDate("2006-10-17");
-			employee.setState("NY");
-			employee.setZipCode(11790);
-			employee.setTelephone("5166328959");
-			employee.setEmployeeID("631-413-5555");
-			employee.setHourlyRate(100);
-			employees.add(employee);
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("SELECT * FROM EmployeeData");
+			while (rs.next()) {
+				Employee employee = new Employee();
+				employee.setEmail(rs.getString("EmailAddress"));
+				employee.setFirstName(rs.getString("FirstName"));
+				employee.setLastName(rs.getString("LastName"));
+				employee.setAddress(rs.getString("LastName"));
+				employee.setCity(rs.getString("City"));
+				employee.setStartDate(rs.getString("StartDate"));
+				employee.setState(rs.getString("State"));
+				employee.setZipCode(Integer.parseInt(rs.getString("ZipCode")));
+				employee.setTelephone(rs.getString("Telephone"));
+				employee.setEmployeeID(rs.getString("SocialSecutiy"));
+				employee.setHourlyRate(Integer.parseInt(rs.getString("HourlyRate")));
+				employees.add(employee);
+			}
+		} catch(Exception e) {
+			System.out.println(e);
 		}
-		/*Sample data ends*/
 		
 		return employees;
 	}
@@ -96,20 +160,28 @@ public class EmployeeDao {
 		 */
 
 		Employee employee = new Employee();
-		
-		/*Sample data begins*/
-		employee.setEmail("shiyong@cs.sunysb.edu");
-		employee.setFirstName("Shiyong");
-		employee.setLastName("Lu");
-		employee.setAddress("123 Success Street");
-		employee.setCity("Stony Brook");
-		employee.setStartDate("2006-10-17");
-		employee.setState("NY");
-		employee.setZipCode(11790);
-		employee.setTelephone("5166328959");
-		employee.setEmployeeID("631-413-5555");
-		employee.setHourlyRate(100);
-		/*Sample data ends*/
+
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("SELECT * FROM EmployeeData");
+			while (rs.next()) {
+				employee.setEmail(rs.getString("EmailAddress"));
+				employee.setFirstName(rs.getString("FirstName"));
+				employee.setLastName(rs.getString("LastName"));
+				employee.setAddress(rs.getString("LastName"));
+				employee.setCity(rs.getString("City"));
+				employee.setStartDate(rs.getString("StartDate"));
+				employee.setState(rs.getString("State"));
+				employee.setZipCode(Integer.parseInt(rs.getString("ZipCode")));
+				employee.setTelephone(rs.getString("Telephone"));
+				employee.setEmployeeID(rs.getString("SocialSecutiy"));
+				employee.setHourlyRate(Integer.parseInt(rs.getString("HourlyRate")));
+			}
+		} catch(Exception e) {
+			System.out.println(e);
+		}
 		
 		return employee;
 	}
@@ -122,14 +194,22 @@ public class EmployeeDao {
 		 */
 		
 		Employee employee = new Employee();
-		
-		/*Sample data begins*/
-		employee.setEmail("shiyong@cs.sunysb.edu");
-		employee.setFirstName("Shiyong");
-		employee.setLastName("Lu");
-		employee.setEmployeeID("631-413-5555");
-		/*Sample data ends*/
-		
+
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("SELECT E.SocialSecurity, E.EmailAddress, E.FirstName, E.LastName, E.EmployeeID, SUM(A.ClosingBid) AS Revenue FROM AuctionData A, EmployeeData E WHERE E.EmployeeID = A.EmployeeID GROUP BY A.EmployeeID ORDER BY Revenue DESC LIMIT 1");
+			while (rs.next()) {
+				employee.setEmail(rs.getString("EmailAddress"));
+				employee.setFirstName(rs.getString("FirstName"));
+				employee.setLastName(rs.getString("LastName"));
+				employee.setEmployeeID(rs.getString("SocialSecurity"));
+			}
+		} catch(Exception e) {
+			System.out.println(e);
+		}
+
 		return employee;
 	}
 
@@ -140,7 +220,22 @@ public class EmployeeDao {
 		 * The Employee ID is required to be returned as a String
 		 */
 
-		return "111-11-1111";
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			String query = "SELECT E.SocialSecurity FROM EmployeeData E WHERE E.EmailAddress = ?";
+			PreparedStatement preparedStmt = con.prepareStatement(query);
+			preparedStmt.setString(1, username);
+			ResultSet rs = preparedStmt.executeQuery();
+			while (rs.next()) {
+				return rs.getString("SocialSecurity");
+			}
+		} catch(Exception e) {
+			System.out.println(e);
+		}
+
+		return "";
 	}
 
 }
