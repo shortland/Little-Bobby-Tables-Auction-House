@@ -124,23 +124,29 @@ public class EmployeeDao {
 
 		List<Employee> employees = new ArrayList<Employee>();
 		
-		/*Sample data begins*/
-		for (int i = 0; i < 10; i++) {
-			Employee employee = new Employee();
-			employee.setEmail("shiyong@cs.sunysb.edu");
-			employee.setFirstName("Shiyong");
-			employee.setLastName("Lu");
-			employee.setAddress("123 Success Street");
-			employee.setCity("Stony Brook");
-			employee.setStartDate("2006-10-17");
-			employee.setState("NY");
-			employee.setZipCode(11790);
-			employee.setTelephone("5166328959");
-			employee.setEmployeeID("631-413-5555");
-			employee.setHourlyRate(100);
-			employees.add(employee);
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("SELECT * FROM EmployeeData");
+			while (rs.next()) {
+				Employee employee = new Employee();
+				employee.setEmail(rs.getString("EmailAddress"));
+				employee.setFirstName(rs.getString("FirstName"));
+				employee.setLastName(rs.getString("LastName"));
+				employee.setAddress(rs.getString("LastName"));
+				employee.setCity(rs.getString("City"));
+				employee.setStartDate(rs.getString("StartDate"));
+				employee.setState(rs.getString("State"));
+				employee.setZipCode(Integer.parseInt(rs.getString("ZipCode")));
+				employee.setTelephone(rs.getString("Telephone"));
+				employee.setEmployeeID(rs.getString("SocialSecutiy"));
+				employee.setHourlyRate(Integer.parseInt(rs.getString("HourlyRate")));
+				employees.add(employee);
+			}
+		} catch(Exception e) {
+			System.out.println(e);
 		}
-		/*Sample data ends*/
 		
 		return employees;
 	}
@@ -154,20 +160,28 @@ public class EmployeeDao {
 		 */
 
 		Employee employee = new Employee();
-		
-		/*Sample data begins*/
-		employee.setEmail("shiyong@cs.sunysb.edu");
-		employee.setFirstName("Shiyong");
-		employee.setLastName("Lu");
-		employee.setAddress("123 Success Street");
-		employee.setCity("Stony Brook");
-		employee.setStartDate("2006-10-17");
-		employee.setState("NY");
-		employee.setZipCode(11790);
-		employee.setTelephone("5166328959");
-		employee.setEmployeeID("631-413-5555");
-		employee.setHourlyRate(100);
-		/*Sample data ends*/
+
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("SELECT * FROM EmployeeData");
+			while (rs.next()) {
+				employee.setEmail(rs.getString("EmailAddress"));
+				employee.setFirstName(rs.getString("FirstName"));
+				employee.setLastName(rs.getString("LastName"));
+				employee.setAddress(rs.getString("LastName"));
+				employee.setCity(rs.getString("City"));
+				employee.setStartDate(rs.getString("StartDate"));
+				employee.setState(rs.getString("State"));
+				employee.setZipCode(Integer.parseInt(rs.getString("ZipCode")));
+				employee.setTelephone(rs.getString("Telephone"));
+				employee.setEmployeeID(rs.getString("SocialSecutiy"));
+				employee.setHourlyRate(Integer.parseInt(rs.getString("HourlyRate")));
+			}
+		} catch(Exception e) {
+			System.out.println(e);
+		}
 		
 		return employee;
 	}
