@@ -191,6 +191,7 @@ public class CustomerDao {
 			return "failure";
 		}*/
 
+		//David Check commit
 		return "success";
 
 		
