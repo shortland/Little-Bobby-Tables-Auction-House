@@ -51,7 +51,13 @@ public class LoginDao {
 		 * Return "failure" for an unsuccessful database operation
 		 */
 		
-		// TODO: Reimplement this, but using every field of a Login Object.
+		// TODO:
+		// I don't really understand the purpose of this.
+		// It's called by res/AddCustomer and res/AddEmployee.
+		// I think it logs the logins of users? But I'm not posivite
+		// executeQuery() should be executeUpdate() for insert/updates
+
+
 		// String table;
 		// if ((login.getRole()).equals("customer")) {
 		// 	table = "CustomerData";
