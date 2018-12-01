@@ -18,7 +18,7 @@ public class LoginDao {
 		 * password, which is the password of the user, is given as method parameter
 		 * Query to verify the username and password and fetch the role of the user, must be implemented
 		 */
-		String authorizationLevel = "null";
+		String authorizationLevel = "";
 
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -34,7 +34,11 @@ public class LoginDao {
 		
 		Login login = new Login();
 		login.setRole(authorizationLevel);
-		return login;
+		if (authorizationLevel.equals("")) {
+			return null;
+		} else {
+			return login;
+		}
 	}
 	
 	public String addUser(Login login) {
@@ -47,22 +51,23 @@ public class LoginDao {
 		 * Return "failure" for an unsuccessful database operation
 		 */
 		
-		String table;
-		if ((login.getRole()).equals("customer")) {
-			table = "CustomerData";
-		}
-		else {
-			table = "EmployeeData";
-		}
+		// TODO: Reimplement this, but using every field of a Login Object.
+		// String table;
+		// if ((login.getRole()).equals("customer")) {
+		// 	table = "CustomerData";
+		// }
+		// else {
+		// 	table = "EmployeeData";
+		// }
 
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
-			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("INSERT INTO " + table + " (EmailAddress, Password) VALUES ('" + login.getUsername() + "', '" + login.getPassword() + "')");
-		} catch(Exception e) {
-			System.out.println(e);
-		}
+		// try {
+		// 	Class.forName("com.mysql.jdbc.Driver");
+		// 	Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+		// 	Statement st = con.createStatement();
+		// 	ResultSet rs = st.executeQuery("INSERT INTO " + table + " (EmailAddress, Password) VALUES ('" + login.getUsername() + "', '" + login.getPassword() + "')");
+		// } catch(Exception e) {
+		// 	System.out.println(e);
+		// }
 
 		return "success";
 	}
