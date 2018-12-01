@@ -267,11 +267,17 @@ public class CustomerDao {
 		 * The sample code returns "success" by default.
 		 * You need to handle the database insertion of the customer details and return "success" or "failure" based on result of the database insertion.
 		 */
-		
-		/*Sample data begins*/
-		
+		try {
+			String sql="INSERT INTO CustomerData (LastName, FirstName, Address, City, State, ZipCode, Telephone, EmailAddress, CreditCard, Rating) VALUES (\'"+customer.getLastName()+"\',\'"+customer.getFirstName()+"\',\'"+customer.getAddress()+"\',\'"+customer.getCity()+"\',\'"+customer.getState()+"\',\'"+customer.getZipCode()+"\',\'"+customer.getTelephone()+ "\',\'"+customer.getEmail()+"\',\'"+customer.getCreditCard()+"\',\'"+customer.getRating()+"\')";
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			st.executeUpdate(sql);
+		}catch(Exception e) {
+			System.out.println(e);
+			return "failure";
+		}	
 		return "success";
-		/*Sample data ends*/
 
 	}
 
@@ -284,9 +290,17 @@ public class CustomerDao {
 		 * You need to handle the database update and return "success" or "failure" based on result of the database update.
 		 */
 		
-		/*Sample data begins*/
+		try {
+			String sql="UPDATE CustomerData SET Address = \'"+customer.getAddress()+"\', City =\'"+customer.getCity()+"\', CreditCard = \'"+customer.getCreditCard()+"\', EmailAddress =\'"+customer.getEmail()+"\', FirstName =\'"+customer.getFirstName()+"\', LastName = \'"+customer.getLastName()+"\', Rating =\'"+customer.getRating()+"\', State = \'"+customer.getState()+"\', Telephone = \'"+customer.getTelephone()+"\', ZipCode = \'"+customer.getZipCode()+"\'";
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			st.executeUpdate(sql);
+		}catch(Exception e) {
+			System.out.println(e);
+			return "failure";
+		}	
 		return "success";
-		/*Sample data ends*/
 
 	}
 
