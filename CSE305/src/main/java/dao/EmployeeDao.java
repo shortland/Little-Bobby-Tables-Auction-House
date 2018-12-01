@@ -194,14 +194,22 @@ public class EmployeeDao {
 		 */
 		
 		Employee employee = new Employee();
-		
-		/*Sample data begins*/
-		employee.setEmail("shiyong@cs.sunysb.edu");
-		employee.setFirstName("Shiyong");
-		employee.setLastName("Lu");
-		employee.setEmployeeID("631-413-5555");
-		/*Sample data ends*/
-		
+
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("SELECT E.SocialSecurity, E.EmailAddress, E.FirstName, E.LastName, E.EmployeeID, SUM(A.ClosingBid) AS Revenue FROM AuctionData A, EmployeeData E WHERE E.EmployeeID = A.EmployeeID GROUP BY A.EmployeeID ORDER BY Revenue DESC LIMIT 1");
+			while (rs.next()) {
+				employee.setEmail(rs.getString("EmailAddress"));
+				employee.setFirstName(rs.getString("FirstName"));
+				employee.setLastName(rs.getString("LastName"));
+				employee.setEmployeeID(rs.getString("SocialSecurity"));
+			}
+		} catch(Exception e) {
+			System.out.println(e);
+		}
+
 		return employee;
 	}
 
@@ -212,7 +220,22 @@ public class EmployeeDao {
 		 * The Employee ID is required to be returned as a String
 		 */
 
-		return "111-11-1111";
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			String query = "SELECT E.SocialSecurity FROM EmployeeData E WHERE E.EmailAddress = ?";
+			PreparedStatement preparedStmt = con.prepareStatement(query);
+			preparedStmt.setString(1, username);
+			ResultSet rs = preparedStmt.executeQuery();
+			while (rs.next()) {
+				return rs.getString("SocialSecurity");
+			}
+		} catch(Exception e) {
+			System.out.println(e);
+		}
+
+		return "";
 	}
 
 }
