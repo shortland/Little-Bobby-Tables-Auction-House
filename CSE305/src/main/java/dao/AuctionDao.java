@@ -119,9 +119,21 @@ public class AuctionDao {
 		 * auctionID is the Auction's ID, given as method parameter
 		 * The method should return a "success" string if the update is successful, else return "failure"
 		 */
-		/* Sample data begins */
+		
+		//David TODO Not sure what this method want. Assuming it want us to update the AuctionData's BuyerID to the Customer's ID who posted the bid value that matches the closing bid
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			ResultSet rs=st.executeQuery("SELECT B.CustomerID FROM Bid B, AuctionData A WHERE A.ClosingBid=B.Value AND A.AuctionID=\'"+auctionID+"\'");
+			int customerID= rs.getInt("CustomerID");
+			st.executeUpdate("UPDATE AuctionData SET BuyerID= \'"+customerID+"\'");
+		}catch(Exception e) {
+			System.out.println(e);
+			return "failure";
+		}
 		return "success";
-		/* Sample data ends */
+		
 	}
 
 	public List getAuctionData(String auctionID, String itemID) {
