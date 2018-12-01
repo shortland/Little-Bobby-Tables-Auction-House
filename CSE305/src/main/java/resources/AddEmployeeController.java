@@ -53,7 +53,8 @@ public class AddEmployeeController extends HttpServlet {
 		String ssn = request.getParameter("employeeSSN");
 		String startDate = request.getParameter("employeeStartDate");
 		float hourlyRate = Float.parseFloat(request.getParameter("employeeHourlyRate"));
-		
+		//String role = request.getParameter("employeeRole");
+
 		Employee employee = new Employee();
 		employee.setEmail(email);
 		employee.setFirstName(firstName);
@@ -66,11 +67,13 @@ public class AddEmployeeController extends HttpServlet {
 		employee.setTelephone(telephone);
 		employee.setEmployeeID(ssn);
 		employee.setHourlyRate(hourlyRate);
+		employee.setPassword(password);
+		//employee.setRole(role);
 		
 		EmployeeDao employeeDao = new EmployeeDao();
 		String result = employeeDao.addEmployee(employee);
 		
-		if(result.equals("success")) {
+		if (result.equals("success")) {
 			Login login = new Login();
 			login.setUsername(email);
 			login.setPassword(password);
