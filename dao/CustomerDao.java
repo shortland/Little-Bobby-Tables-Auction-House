@@ -289,10 +289,10 @@ public class CustomerDao {
 			preparedStmt.setString (4, customer.getEmail());
 			preparedStmt.setString (5, customer.getFirstName());
 			preparedStmt.setString (6, customer.getLastName());
-			preparedStmt.setString (7, customer.getRating());
+			preparedStmt.setString (7, "" + customer.getRating());
 			preparedStmt.setString (8, customer.getState());
 			preparedStmt.setString (9, customer.getTelephone());
-			preparedStmt.setString (10, customer.getZipCode());
+			preparedStmt.setString (10, "" + customer.getZipCode());
 			preparedStmt.setString (11, customer.getCustomerID());
 			preparedStmt.execute();
 		} catch(Exception e) {
