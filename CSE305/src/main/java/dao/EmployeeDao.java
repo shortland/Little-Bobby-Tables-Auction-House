@@ -29,8 +29,6 @@ public class EmployeeDao {
 				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			preparedStmt.setString (1, employee.getAddress());
-			// TODO: 
-			// Is this always going to be a customerRepresentative? Or can it be a manager?
 			preparedStmt.setString (2, "customerRepresentative");
 			preparedStmt.setString (3, employee.getCity());
 			preparedStmt.setString (4, employee.getEmail());
@@ -39,7 +37,7 @@ public class EmployeeDao {
 			preparedStmt.setString (7, employee.getLastName());
 			preparedStmt.setString (8, employee.getPassword());
 			preparedStmt.setString (9, employee.getEmployeeID());
-			preparedStmt.setString (10, employee.getStartDate());
+			preparedStmt.setString (10, employee.getStartDate() +  " 00:00:00");
 			preparedStmt.setString (11, employee.getState());
 			preparedStmt.setString (12, employee.getTelephone());
 			preparedStmt.setString (13, "" + employee.getZipCode());
@@ -64,11 +62,9 @@ public class EmployeeDao {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
-			String query = "UPDATE EmployeeData SET Address = ?, AuthorizationLevel = ?, City = ?, EmailAddress = ?, FirstName = ?, HourlyRate = ?, LastName = ?, Password = ?, SocialSecurity = ?, StartDate = ?, State = ?, Telephone = ?, ZipCode = ? WHERE SocialSecurity = ?";
+			String query = "UPDATE EmployeeData SET Address = ?, AuthorizationLevel = ?, City = ?, EmailAddress = ?, FirstName = ?, HourlyRate = ?, LastName = ?, Password = ?, SocialSecurity = ?, StartDate = ?, State = ?, Telephone = ?, ZipCode = ? WHERE SocialSecurity = ? LIMIT 1";
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			preparedStmt.setString (1, employee.getAddress());
-			// TODO: 
-			// Is this always going to be a customerRepresentative? Or can it be a manager?
 			preparedStmt.setString (2, "customerRepresentative");
 			preparedStmt.setString (3, employee.getCity());
 			preparedStmt.setString (4, employee.getEmail());
@@ -77,7 +73,7 @@ public class EmployeeDao {
 			preparedStmt.setString (7, employee.getLastName());
 			preparedStmt.setString (8, employee.getPassword());
 			preparedStmt.setString (9, employee.getEmployeeID());
-			preparedStmt.setString (10, employee.getStartDate());
+			preparedStmt.setString (10, employee.getStartDate() + " 00:00:00");
 			preparedStmt.setString (11, employee.getState());
 			preparedStmt.setString (12, employee.getTelephone());
 			preparedStmt.setString (13, "" + employee.getZipCode());
@@ -101,7 +97,7 @@ public class EmployeeDao {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
-			String query = "DELETE FROM EmployeeData WHERE SocialSecurity = ?";
+			String query = "DELETE FROM EmployeeData WHERE SocialSecurity = ? LIMIT 1";
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			preparedStmt.setString (1, employeeID);
 			preparedStmt.execute();
@@ -128,13 +124,13 @@ public class EmployeeDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT * FROM EmployeeData");
+			ResultSet rs = st.executeQuery("SELECT EmailAddress, FirstName, LastName, Address, City, DATE_FORMAT(StartDate, '%Y-%m-%d') AS StartDate, State, ZipCode, Telephone, SocialSecurity, HourlyRate FROM EmployeeData");
 			while (rs.next()) {
 				Employee employee = new Employee();
 				employee.setEmail(rs.getString("EmailAddress"));
 				employee.setFirstName(rs.getString("FirstName"));
 				employee.setLastName(rs.getString("LastName"));
-				employee.setAddress(rs.getString("LastName"));
+				employee.setAddress(rs.getString("Address"));
 				employee.setCity(rs.getString("City"));
 				employee.setStartDate(rs.getString("StartDate"));
 				employee.setState(rs.getString("State"));
@@ -165,12 +161,12 @@ public class EmployeeDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT * FROM EmployeeData");
+			ResultSet rs = st.executeQuery("SELECT EmailAddress, FirstName, LastName, Address, City, DATE_FORMAT(StartDate, '%Y-%m-%d') AS StartDate, State, ZipCode, Telephone, SocialSecurity, HourlyRate FROM EmployeeData");
 			while (rs.next()) {
 				employee.setEmail(rs.getString("EmailAddress"));
 				employee.setFirstName(rs.getString("FirstName"));
 				employee.setLastName(rs.getString("LastName"));
-				employee.setAddress(rs.getString("LastName"));
+				employee.setAddress(rs.getString("Address"));
 				employee.setCity(rs.getString("City"));
 				employee.setStartDate(rs.getString("StartDate"));
 				employee.setState(rs.getString("State"));
@@ -224,7 +220,7 @@ public class EmployeeDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			String query = "SELECT E.SocialSecurity FROM EmployeeData E WHERE E.EmailAddress = ?";
+			String query = "SELECT E.SocialSecurity FROM EmployeeData E WHERE E.EmailAddress = ? LIMIT 1";
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			preparedStmt.setString(1, username);
 			ResultSet rs = preparedStmt.executeQuery();
@@ -237,5 +233,4 @@ public class EmployeeDao {
 
 		return "";
 	}
-
 }
