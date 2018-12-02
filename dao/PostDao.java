@@ -25,15 +25,14 @@ public class PostDao {
 
 		List<Item> items = new ArrayList<Item>();
 		String[] dateData = post.getExpireDate().split("-");
-		String s= dateData[1]+"-"+dateData[0];
+		String s = dateData[1] + "-" + dateData[0];
 
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();			
 			ResultSet rs = st.executeQuery("SELECT I.ItemName, I.ItemID, I.ItemType, I.YearManufactured, COUNT(I.ItemID) AS CopiesSold, SUM(A.ClosingBid) AS Profits FROM AuctionData A, ItemData I WHERE I.ItemID = A.ItemID AND MONTH(A.ClosingDate) = " + dateData[0] + " AND YEAR(A.ClosingDate) = " + dateData[1] + " GROUP BY I.ItemID");
-			//TODO2 query can probably be optimized.
-			
+
 			while (rs.next()) {
 				Item item = new Item();
 				item.setName(rs.getString("ItemName"));
@@ -43,13 +42,11 @@ public class PostDao {
 				item.setSoldPrice(rs.getInt("Profits"));
 				item.setYearManufactured(rs.getInt("YearManufactured"));
 				items.add(item);
-				//TODO2 some of these are probably unnecessary 
 			}
 		} catch(Exception e) {
 			System.out.println(e);
 		}		
 
 		return items;
-		
 	}
 }
