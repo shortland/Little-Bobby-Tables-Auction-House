@@ -147,7 +147,7 @@ public class CustomerDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("select * from CustomerData where CustomerID = \'" + customerID +"\'");
+			ResultSet rs = st.executeQuery("select * from CustomerData where CustomerID = '" + customerID +"'");
 			while (rs.next()) {
 				customer.setCustomerID(rs.getString("CustomerID"));
 				customer.setAddress(rs.getString("Address"));
@@ -185,7 +185,7 @@ public class CustomerDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			st.executeUpdate("DELETE CustomerData WHERE CustomerID= \'"+customerID+"\'");
+			st.executeUpdate("DELETE FROM CustomerData WHERE CustomerID= '"+customerID+"'");
 		}catch(Exception e) {
 			System.out.println(e);
 			return "failure";
@@ -211,7 +211,7 @@ public class CustomerDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("select CustomerID from CustomerData where EmailAddress = \'" + username +"\'");
+			ResultSet rs = st.executeQuery("select CustomerID from CustomerData where EmailAddress = '" + username +"'");
 			while (rs.next()) {
 				customerID = (rs.getString("CustomerID"));
 			}
@@ -269,7 +269,7 @@ public class CustomerDao {
 		 * You need to handle the database insertion of the customer details and return "success" or "failure" based on result of the database insertion.
 		 */
 		try {
-			String sql="INSERT INTO CustomerData (LastName, FirstName, Address, City, State, ZipCode, Telephone, EmailAddress, CreditCard, Rating) VALUES (\'"+customer.getLastName()+"\',\'"+customer.getFirstName()+"\',\'"+customer.getAddress()+"\',\'"+customer.getCity()+"\',\'"+customer.getState()+"\',\'"+customer.getZipCode()+"\',\'"+customer.getTelephone()+ "\',\'"+customer.getEmail()+"\',\'"+customer.getCreditCard()+"\',\'"+customer.getRating()+"\')";
+			String sql="INSERT INTO CustomerData (LastName, FirstName, Address, City, State, ZipCode, Telephone, EmailAddress, CreditCard, Rating) VALUES ('"+customer.getLastName()+"', '"+customer.getFirstName()+"', '"+customer.getAddress()+"', '"+customer.getCity()+"', '"+customer.getState()+"', '"+customer.getZipCode()+"', '"+customer.getTelephone()+ "', '"+customer.getEmail()+"', '"+customer.getCreditCard()+"', '"+customer.getRating()+"')";
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
@@ -292,11 +292,14 @@ public class CustomerDao {
 		 */
 		
 		try {
-			String sql="UPDATE CustomerData SET Address = \'"+customer.getAddress()+"\', City =\'"+customer.getCity()+"\', CreditCard = \'"+customer.getCreditCard()+"\', EmailAddress =\'"+customer.getEmail()+"\', FirstName =\'"+customer.getFirstName()+"\', LastName = \'"+customer.getLastName()+"\', Rating =\'"+customer.getRating()+"\', State = \'"+customer.getState()+"\', Telephone = \'"+customer.getTelephone()+"\', ZipCode = \'"+customer.getZipCode()+"\'";
+			
+			// David TODO Assuming CustomerID(SSN) is not able to changed and we use it to make sure which customer to edit
+			String sql=;
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			st.executeUpdate(sql);
+			st.executeUpdate("UPDATE CustomerData SET Address = '"+customer.getAddress()+"', City ='"+customer.getCity()+"', CreditCard = '"+customer.getCreditCard()+"', EmailAddress ='"+customer.getEmail()+"', FirstName ='"+customer.getFirstName()+"', LastName = '"+customer.getLastName()+"', Rating ='"+customer.getRating()+"', State = '"+customer.getState()+"', Telephone = '"+customer.getTelephone()+"', ZipCode = '"+customer.getZipCode()+
+					"' WHERE CustomerID='"+customer.getCustomerID()+"'");
 		}catch(Exception e) {
 			System.out.println(e);
 			return "failure";
