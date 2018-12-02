@@ -57,14 +57,14 @@ public class ItemDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT I.ItemName, COUNT(A.ItemID) as AmountSold FROM AuctionData A, ItemData I WHERE I.ItemID = A.ItemID AND A.ClosingBid IS NOT NULL AND A.ClosingBid >= A.Reserve GROUP BY A.ItemID ORDER BY COUNT(ItemID) DESC LIMIT 10");
+			ResultSet rs = st.executeQuery("SELECT I.ItemID, I.ItemDescription, I.ItemName, I.ItemType, COUNT(A.ItemID) as AmountSold FROM AuctionData A, ItemData I WHERE I.ItemID = A.ItemID AND A.ClosingBid IS NOT NULL AND A.ClosingBid >= A.Reserve GROUP BY A.ItemID ORDER BY COUNT(ItemID) DESC");
 			while (rs.next()) {
 				Item item = new Item();
 				item.setItemID(rs.getInt("ItemID"));
 				item.setDescription(rs.getString("ItemDescription"));
 				item.setType(rs.getString("ItemType"));
 				item.setName(rs.getString("ItemName"));
-				item.setNumCopies(rs.getInt("AmountInStock"));
+				item.setNumCopies(rs.getInt("AmountSold"));
 				items.add(item);
 			}
 		} catch(Exception e) {
@@ -89,7 +89,7 @@ public class ItemDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT I.ItemName, SUM(Z.ClosingBid) as Profits FROM AuctionData Z, ItemData I WHERE Z.ItemID = I.ItemID AND (I.ItemName = '"+searchKeyword+"' OR I.ItemType = '"+searchKeyword+"' OR I.PosterFirstName = '"+searchKeyword+"') AND Z.ClosingBid IS NOT NULL AND Z.ClosingBid >= Z.Reserve GROUP BY I.ItemName");
+			ResultSet rs = st.executeQuery("SELECT I.ItemName, SUM(A.ClosingBid) as Profits FROM AuctionData A, ItemData I, CustomerData C WHERE A.ItemID = I.ItemID AND (I.ItemName LIKE '%" + searchKeyword + "%' OR I.ItemType LIKE '%" + searchKeyword + "%' OR (C.FirstName LIKE '%" + searchKeyword + "%' AND C.CustomerID = A.BuyerID)) AND A.ClosingBid IS NOT NULL AND A.ClosingBid >= A.Reserve GROUP BY I.ItemName");
 			while (rs.next()) {
 				Item item = new Item();
 				item.setName(rs.getString("ItemName"));
@@ -321,15 +321,13 @@ public class ItemDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT I.ItemID, I.ItemName, I.ItemDescription, I.ItemType, I.AmountInStock, COUNT(A.ItemID) AS AmountSold FROM AuctionData A, ItemData I WHERE A.SellerID = '" + customerID + "' AND I.ItemID = A.ItemID GROUP BY A.ItemID ORDER BY AmountSold DESC");
+			ResultSet rs = st.executeQuery("SELECT I.ItemID, I.ItemDescription, I.ItemName, I.ItemType, COUNT(A.ItemID) as AmountSold FROM AuctionData A, ItemData I WHERE I.ItemID = A.ItemID AND A.ClosingBid IS NOT NULL AND A.ClosingBid >= A.Reserve GROUP BY A.ItemID ORDER BY COUNT(ItemID) DESC");
 			while (rs.next()) {
 				Item item = new Item();
 				item.setItemID(rs.getInt("ItemID"));
 				item.setDescription(rs.getString("ItemDescription"));
 				item.setType(rs.getString("ItemType"));
 				item.setName(rs.getString("ItemName"));
-				// TODO: 
-				// this might need to be AmountInStock
 				item.setNumCopies(rs.getInt("AmountSold")); 
 				items.add(item);
 			}
@@ -339,5 +337,4 @@ public class ItemDao {
 		
 		return items;
 	}
-
 }
