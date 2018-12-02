@@ -85,6 +85,7 @@ public class BidDao {
 		 * Query to submit a bid by a customer, indicated by customerID, must be implemented
 		 * After inserting the bid data, return the bid details encapsulated in "bid" object
 		 */
+		
 
 		/*Sample data begins*/
 		bid.setAuctionID(123);
@@ -107,17 +108,24 @@ public class BidDao {
 		 * Query to  produce a list of sales by item name or by customer name must be implemented
 		 * The item name or the customer name can be searched with the provided searchKeyword
 		 */
-
-		/*Sample data begins*/
-		for (int i = 0; i < 10; i++) {
-			Bid bid = new Bid();
-			bid.setAuctionID(123);
-			bid.setCustomerID("123-12-1234");
-			bid.setBidTime("2008-12-11");
-			bid.setBidPrice(100);
-			bids.add(bid);			
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			//David TODO The SQL is working but it gives the same Bid multiple times 
+			ResultSet rs= st.executeQuery("(SELECT B.*FROM Bid B, AuctionData A, ItemData I  WHERE A.ClosingBidID = B.BidNum AND A.ItemID = I.ItemID AND I.ItemName LIKE \'%"+searchKeyword+"%\'UNION ( SELECT B.* FROM Bid B, AuctionData A, CustomerData C WHERE A.ClosingBidID = B.BidNum AND C.FirstName LIKE \'%"+searchKeyword+"%\') UNION ( SELECT B.*  FROM Bid B, AuctionData A, CustomerData C WHERE A.ClosingBidID = B.BidNum AND C.LastName LIKE \'%"+searchKeyword+"%\')");
+			while(rs.next()) {
+				Bid bid = new Bid();
+				bid.setAuctionID(rs.getInt("AuctionID"));
+				bid.setCustomerID(Integer.toString(rs.getInt("CustomerID")));
+				bid.setBidTime(rs.getString("Time"));
+				bid.setBidPrice(rs.getFloat("Value"));
+				bids.add(bid);
+			}
+		}catch(Exception e) {
+			System.out.println(e);
 		}
-		/*Sample data ends*/
+
 		
 		return bids;
 	}

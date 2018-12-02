@@ -35,8 +35,8 @@ public class CustomerDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("select * from CustomerData where FirstName like \'%" + searchKeyword +"%\'"
-					+ "or LastName like \'%" + searchKeyword + "%\'");
+			ResultSet rs = st.executeQuery("SELECT * FROM CustomerData WHERE FirstName LIKE \'%" + searchKeyword +"%\'"
+					+ "or LastName LIKE \'%" + searchKeyword + "%\'");
 			while (rs.next()) {
 				Customer customer = new Customer();
 				customer.setCustomerID(rs.getString("CustomerID"));
@@ -236,7 +236,7 @@ public class CustomerDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs= st.executeQuery("SELECT C.* FROM CustomerData C, AuctionData A WHERE C.CustomerID= A.SellerID");
+			ResultSet rs= st.executeQuery("SELECT C.* FROM CustomerData C, AuctionData A WHERE C.CustomerID= A.SellerID GROUP BY CustomerID");
 			while(rs.next()) {
 				Customer customer = new Customer();
 				customer.setCustomerID(Integer.toString(rs.getInt("CustomerID")));
@@ -247,6 +247,7 @@ public class CustomerDao {
 				customer.setState(rs.getString("State"));
 				customer.setEmail(rs.getString("EmailAddress"));
 				customer.setZipCode(rs.getInt("ZipCode"));
+				customer.setRating(rs.getInt("Rating"));
 				customers.add(customer);
 			}
 		}catch(Exception e) {
