@@ -113,7 +113,7 @@ public class BidDao {
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
 			//David TODO The SQL is working but it gives the same Bid multiple times 
-			ResultSet rs= st.executeQuery("(SELECT B.*FROM Bid B, AuctionData A, ItemData I  WHERE A.ClosingBidID = B.BidNum AND A.ItemID = I.ItemID AND I.ItemName LIKE \'%"+searchKeyword+"%\'UNION ( SELECT B.* FROM Bid B, AuctionData A, CustomerData C WHERE A.ClosingBidID = B.BidNum AND C.FirstName LIKE \'%"+searchKeyword+"%\') UNION ( SELECT B.*  FROM Bid B, AuctionData A, CustomerData C WHERE A.ClosingBidID = B.BidNum AND C.LastName LIKE \'%"+searchKeyword+"%\')");
+			ResultSet rs= st.executeQuery("(SELECT B.* FROM Bid B, AuctionData A, ItemData I WHERE A.ClosingBidID = B.BidNum AND A.ItemID = I.ItemID AND I.ItemName LIKE '%" + searchKeyword + "%' UNION (SELECT B.* FROM Bid B, AuctionData A, CustomerData C WHERE A.ClosingBidID = B.BidNum AND C.FirstName LIKE '%" + searchKeyword + "%') UNION (SELECT B.* FROM Bid B, AuctionData A, CustomerData C WHERE A.ClosingBidID = B.BidNum AND C.LastName LIKE '%" + searchKeyword + "%')");
 			while(rs.next()) {
 				Bid bid = new Bid();
 				bid.setAuctionID(rs.getInt("AuctionID"));
