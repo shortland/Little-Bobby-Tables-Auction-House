@@ -18,6 +18,14 @@ public class Customer {
 	private String email;
 	private String creditCard;
 	private int rating;
+	private String password;
+
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
 	public String getCustomerID() {
 		return customerID;
 	}
