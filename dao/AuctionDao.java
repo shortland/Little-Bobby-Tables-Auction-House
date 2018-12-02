@@ -164,7 +164,7 @@ public class AuctionDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs=st.executeQuery("SELECT I.*, B.*, C.*, A.* FROM ItemData I, Bid B, AuctionData A, CustomerData C WHERE A.ItemID = I.ItemID AND B.AuctionID= A.AuctionID AND B.CustomerID = C.CustomerID AND A.BuyerID= C.CustomerID");
+			ResultSet rs=st.executeQuery("SELECT I.*, MAX(B.Value), C.FirstName, C.LastName, C.CustomerID, A.* FROM ItemData I, Bid B, AuctionData A, CustomerData C WHERE A.AuctionID='"+auctionID+"' AND A.ItemID='"+itemID+"' AND A.ItemID = I.ItemID AND B.AuctionID= A.AuctionID AND B.CustomerID = C.CustomerID AND A.BuyerID= C.CustomerID");
 			while(rs.next()) {
 				item.setItemID(rs.getInt("ItemID"));
 				item.setDescription(rs.getString("ItemDescription"));
