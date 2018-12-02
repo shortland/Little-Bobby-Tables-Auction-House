@@ -29,8 +29,7 @@ public class CustomerDao {
 		 * The students code to fetch data from the database based on searchKeyword will be written here
 		 * Each record is required to be encapsulated as a "Customer" class object and added to the "customers" List
 		 */
-		
-		/*Sample data begins*/
+
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
@@ -55,11 +54,9 @@ public class CustomerDao {
 		} catch(Exception e) {
 			System.out.println(e);
 		}
-		/*Sample data ends*/
-		
+
 		return customers;
 	}
-
 
 	public Customer getHighestRevenueCustomer() {
 		/*
@@ -93,7 +90,6 @@ public class CustomerDao {
 		}
 	
 		return customer;
-		
 	}
 
 	public List<Customer> getCustomerMailingList() {
@@ -124,7 +120,7 @@ public class CustomerDao {
 				customer.setZipCode(rs.getInt("ZipCode"));
 				customers.add(customer);	
 			}
-		}catch(Exception e) {
+		} catch(Exception e) {
 			System.out.println(e);
 		}
 		
@@ -164,10 +160,7 @@ public class CustomerDao {
 		} catch(Exception e) {
 			System.out.println(e);
 		}
-		
 
-		/*Sample data ends*/
-		
 		return customer;
 	}
 	
@@ -186,17 +179,13 @@ public class CustomerDao {
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
 			st.executeUpdate("DELETE FROM CustomerData WHERE CustomerID= '"+customerID+"'");
-		}catch(Exception e) {
+		} catch(Exception e) {
 			System.out.println(e);
 			return "failure";
 		}
 
-		//David Check commit
 		return "success";
-
-		
 	}
-
 
 	public String getCustomerID(String username) {
 		/*
@@ -222,7 +211,6 @@ public class CustomerDao {
 		return customerID;
 	}
 
-
 	public List<Customer> getSellers() {
 		
 		/*
@@ -232,6 +220,7 @@ public class CustomerDao {
 		 */
 
 		List<Customer> customers = new ArrayList<Customer>();
+
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
@@ -250,14 +239,12 @@ public class CustomerDao {
 				customer.setRating(rs.getInt("Rating"));
 				customers.add(customer);
 			}
-		}catch(Exception e) {
+		} catch(Exception e) {
 			System.out.println(e);
 		}
 		
 		return customers;
-
 	}
-
 
 	public String addCustomer(Customer customer) {
 
@@ -274,12 +261,12 @@ public class CustomerDao {
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
 			st.executeUpdate(sql);
-		}catch(Exception e) {
+		} catch(Exception e) {
 			System.out.println(e);
 			return "failure";
-		}	
-		return "success";
+		}
 
+		return "success";
 	}
 
 	public String editCustomer(Customer customer) {
@@ -292,20 +279,27 @@ public class CustomerDao {
 		 */
 		
 		try {
-			
-			// David TODO Assuming CustomerID(SSN) is not able to changed and we use it to make sure which customer to edit
-			String sql=;
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
-			Statement st = con.createStatement();
-			st.executeUpdate("UPDATE CustomerData SET Address = '"+customer.getAddress()+"', City ='"+customer.getCity()+"', CreditCard = '"+customer.getCreditCard()+"', EmailAddress ='"+customer.getEmail()+"', FirstName ='"+customer.getFirstName()+"', LastName = '"+customer.getLastName()+"', Rating ='"+customer.getRating()+"', State = '"+customer.getState()+"', Telephone = '"+customer.getTelephone()+"', ZipCode = '"+customer.getZipCode()+
-					"' WHERE CustomerID='"+customer.getCustomerID()+"'");
-		}catch(Exception e) {
+			String query = "UPDATE CustomerData SET Address = ?, City = ?, CreditCard = ?, EmailAddress = ?, FirstName = ?, LastName = ?, Rating = ?, State = ?, Telephone = ?, ZipCode = ? WHERE CustomerID = ?";
+			PreparedStatement preparedStmt = con.prepareStatement(query);
+			preparedStmt.setString (1, customer.getAddress());
+			preparedStmt.setString (2, customer.getCity());
+			preparedStmt.setString (3, customer.getCreditCard());
+			preparedStmt.setString (4, customer.getEmail());
+			preparedStmt.setString (5, customer.getFirstName());
+			preparedStmt.setString (6, customer.getLastName());
+			preparedStmt.setString (7, customer.getRating());
+			preparedStmt.setString (8, customer.getState());
+			preparedStmt.setString (9, customer.getTelephone());
+			preparedStmt.setString (10, customer.getZipCode());
+			preparedStmt.setString (11, customer.getCustomerID());
+			preparedStmt.execute();
+		} catch(Exception e) {
 			System.out.println(e);
 			return "failure";
 		}	
+
 		return "success";
-
 	}
-
 }
