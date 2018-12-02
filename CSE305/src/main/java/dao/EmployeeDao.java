@@ -77,7 +77,7 @@ public class EmployeeDao {
 			preparedStmt.setString (11, employee.getState());
 			preparedStmt.setString (12, employee.getTelephone());
 			preparedStmt.setString (13, "" + employee.getZipCode());
-			preparedStmt.setString (13, employee.getEmployeeID());
+			preparedStmt.setString (14, employee.getEmployeeID());
 			preparedStmt.execute();
 		} catch(Exception e) {
 			System.out.println(e);

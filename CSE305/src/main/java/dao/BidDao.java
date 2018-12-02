@@ -91,9 +91,9 @@ public class BidDao {
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
 			ResultSet rs= st.executeQuery("SELECT A.AuctionID FROM AuctionData A, ItemData I WHERE A.ItemID='"+itemID+"' AND A.AuctionID = '"+auctionID+"'");
-			if(Integer.toString(rs.getInt("AuctionID")).equals(auctionID)) {
+			if (Integer.toString(rs.getInt("AuctionID")).equals(auctionID)) {
 				st.executeUpdate("INSERT INTO Bid (AuctionID, CustomerID, Value, MaxBid) VALUE('"+auctionID+"', '"+customerID+"', '"+currentBid+"', '"+maxBid+"')");
-				bid.setAuctionID(auctionID);
+				bid.setAuctionID(Integer.parseInt(auctionID));
 				bid.setCustomerID(customerID);
 				bid.setBidPrice(currentBid);
 				bid.setMaxBid(maxBid);
