@@ -93,7 +93,7 @@ public class AuctionDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT A.* FROM AuctionData A, EmployeeData E WHERE A.EmployeeID = E.EmployeeID AND E.EmailAddress =\'"+employeeEmail+"\'");
+			ResultSet rs = st.executeQuery("SELECT A.* FROM AuctionData A, EmployeeData E WHERE A.EmployeeID = E.EmployeeID AND E.EmailAddress =\'"+employeeEmail+"\' AND A.ClosingDate>CURRENT_TIMESTAMP");
 			while(rs.next()) {
 				Auction auction = new Auction();
 				auction.setAuctionID(rs.getInt("AuctionID"));
