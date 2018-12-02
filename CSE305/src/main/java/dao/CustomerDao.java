@@ -35,10 +35,10 @@ public class CustomerDao {
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
 			ResultSet rs = st.executeQuery("SELECT * FROM CustomerData WHERE FirstName LIKE \'%" + searchKeyword +"%\'"
-					+ "or LastName LIKE \'%" + searchKeyword + "%\'");
+					+ " or LastName LIKE \'%" + searchKeyword + "%\'");
 			while (rs.next()) {
 				Customer customer = new Customer();
-				customer.setCustomerID(rs.getString("CustomerID"));
+				customer.setCustomerID(rs.getString("SocialSecurity"));
 				customer.setAddress(rs.getString("Address"));
 				customer.setLastName(rs.getString("LastName"));
 				customer.setFirstName(rs.getString("FirstName"));
@@ -73,7 +73,7 @@ public class CustomerDao {
 			ResultSet rs = st.executeQuery("SELECT C.*, SUM(Z.ClosingBid) as Profits FROM AuctionData Z, ItemData I, CustomerData C WHERE Z.ItemID = I.ItemID AND Z.SellerID = C.CustomerID AND Z.ClosingBid IS NOT NULL AND Z.ClosingBid >= Z.Reserve GROUP BY C.CustomerID LIMIT 1");
 			
 			while (rs.next()) {
-				customer.setCustomerID(rs.getString("CustomerID"));
+				customer.setCustomerID(rs.getString("SocialSecurity"));
 				customer.setAddress(rs.getString("Address"));
 				customer.setLastName(rs.getString("LastName"));
 				customer.setFirstName(rs.getString("FirstName"));
@@ -110,7 +110,7 @@ public class CustomerDao {
 			ResultSet rs= st.executeQuery("SELECT * FROM CustomerData");
 			while(rs.next()) {
 				Customer customer = new Customer();
-				customer.setCustomerID(Integer.toString(rs.getInt("CustomerID")));
+				customer.setCustomerID(Integer.toString(rs.getInt("SocialSecurity")));
 				customer.setAddress(rs.getString("Address"));
 				customer.setLastName(rs.getString("LastName"));
 				customer.setFirstName(rs.getString("FirstName"));
@@ -143,9 +143,9 @@ public class CustomerDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("select * from CustomerData where CustomerID = '" + customerID +"'");
+			ResultSet rs = st.executeQuery("select * from CustomerData where SocialSecurity = '" + customerID +"'");
 			while (rs.next()) {
-				customer.setCustomerID(rs.getString("CustomerID"));
+				customer.setCustomerID(rs.getString("SocialSecurity"));
 				customer.setAddress(rs.getString("Address"));
 				customer.setLastName(rs.getString("LastName"));
 				customer.setFirstName(rs.getString("FirstName"));
@@ -178,7 +178,7 @@ public class CustomerDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			st.executeUpdate("DELETE FROM CustomerData WHERE CustomerID= '"+customerID+"'");
+			st.executeUpdate("DELETE FROM CustomerData WHERE SocialSecurity = '" + customerID + "'");
 		} catch(Exception e) {
 			System.out.println(e);
 			return "failure";
@@ -200,9 +200,9 @@ public class CustomerDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("select CustomerID from CustomerData where EmailAddress = '" + username +"'");
+			ResultSet rs = st.executeQuery("SELECT SocialSecurity FROM CustomerData WHERE EmailAddress = '" + username +"'");
 			while (rs.next()) {
-				customerID = (rs.getString("CustomerID"));
+				customerID = (rs.getString("SocialSecurity"));
 			}
 		} catch(Exception e) {
 			System.out.println(e);
@@ -225,10 +225,10 @@ public class CustomerDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs= st.executeQuery("SELECT C.* FROM CustomerData C, AuctionData A WHERE C.CustomerID= A.SellerID GROUP BY CustomerID");
+			ResultSet rs= st.executeQuery("SELECT C.* FROM CustomerData C, AuctionData A WHERE C.CustomerID = A.SellerID GROUP BY CustomerID");
 			while(rs.next()) {
 				Customer customer = new Customer();
-				customer.setCustomerID(Integer.toString(rs.getInt("CustomerID")));
+				customer.setCustomerID(Integer.toString(rs.getInt("SocialSecurity")));
 				customer.setAddress(rs.getString("Address"));
 				customer.setLastName(rs.getString("LastName"));
 				customer.setFirstName(rs.getString("FirstName"));
@@ -256,7 +256,7 @@ public class CustomerDao {
 		 * You need to handle the database insertion of the customer details and return "success" or "failure" based on result of the database insertion.
 		 */
 		try {
-			String sql="INSERT INTO CustomerData (LastName, FirstName, Address, City, State, ZipCode, Telephone, EmailAddress, CreditCard, Rating) VALUES ('"+customer.getLastName()+"', '"+customer.getFirstName()+"', '"+customer.getAddress()+"', '"+customer.getCity()+"', '"+customer.getState()+"', '"+customer.getZipCode()+"', '"+customer.getTelephone()+ "', '"+customer.getEmail()+"', '"+customer.getCreditCard()+"', '"+customer.getRating()+"')";
+			String sql = "INSERT INTO CustomerData (Password, LastName, FirstName, Address, City, State, ZipCode, Telephone, EmailAddress, CreditCard, Rating) VALUES ('"+customer.getPassword()+"', '"+customer.getLastName()+"', '"+customer.getFirstName()+"', '"+customer.getAddress()+"', '"+customer.getCity()+"', '"+customer.getState()+"', '"+customer.getZipCode()+"', '"+customer.getTelephone()+ "', '"+customer.getEmail()+"', '"+customer.getCreditCard()+"', '"+customer.getRating()+"')";
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
@@ -281,7 +281,7 @@ public class CustomerDao {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
-			String query = "UPDATE CustomerData SET Address = ?, City = ?, CreditCard = ?, EmailAddress = ?, FirstName = ?, LastName = ?, Rating = ?, State = ?, Telephone = ?, ZipCode = ? WHERE CustomerID = ?";
+			String query = "UPDATE CustomerData SET Address = ?, City = ?, CreditCard = ?, EmailAddress = ?, FirstName = ?, LastName = ?, Rating = ?, State = ?, Telephone = ?, ZipCode = ? WHERE SocialSecurity = ?";
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			preparedStmt.setString (1, customer.getAddress());
 			preparedStmt.setString (2, customer.getCity());

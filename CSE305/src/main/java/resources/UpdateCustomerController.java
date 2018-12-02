@@ -49,6 +49,7 @@ public class UpdateCustomerController extends HttpServlet {
 		String ssn = request.getParameter("customerSSN");
 		String creditCard = request.getParameter("customerCreditCard");
 		int rating = Integer.parseInt(request.getParameter("customerRating"));
+		String password = request.getParameter("customerPassword");
 		
 		Customer customer = new Customer();
 		customer.setEmail(email);
@@ -62,6 +63,7 @@ public class UpdateCustomerController extends HttpServlet {
 		customer.setCustomerID(ssn);
 		customer.setCreditCard(creditCard);
 		customer.setRating(rating);
+		customer.setPassword(password);
 		
 		CustomerDao customerDao = new CustomerDao();
 		String result = customerDao.editCustomer(customer);
