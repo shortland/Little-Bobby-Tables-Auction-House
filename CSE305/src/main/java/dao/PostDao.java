@@ -25,7 +25,7 @@ public class PostDao {
 
 		List<Item> items = new ArrayList<Item>();
 		String[] dateData = post.getExpireDate().split("-");
-		String s= dateData[1]+"-"+dateData[0];
+		String s = dateData[1]+"-"+dateData[0];
 
 		try {
 			Class.forName("com.mysql.jdbc.Driver");

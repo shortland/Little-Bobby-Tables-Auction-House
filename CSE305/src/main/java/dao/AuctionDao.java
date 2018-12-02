@@ -37,8 +37,10 @@ public class AuctionDao {
 				auction.setReserve(rs.getInt("Reserve"));
 				auctions.add(auction);
 			}
-		}catch(Exception e) {
+		} catch(Exception e) {
+			System.out.println(e);
 		}
+
 		return auctions;
 	}
 
@@ -72,10 +74,11 @@ public class AuctionDao {
 				auction.setReserve(rs.getInt("Reserve"));
 				auctions.add(auction);
 			}
-		}catch(Exception e) {
+		} catch(Exception e) {
+			System.out.println(e);
 		}
-		return auctions;
 
+		return auctions;
 	}
 
 	public List<Auction> getOpenAuctions(String employeeEmail) {
@@ -106,10 +109,11 @@ public class AuctionDao {
 				auction.setReserve(rs.getInt("Reserve"));
 				auctions.add(auction);
 			}
-		}catch(Exception e) {
+		} catch(Exception e) {
+			System.out.println(e);
 		}
+
 		return auctions;
-		
 	}
 
 	public String recordSale(String auctionID) {
@@ -128,12 +132,12 @@ public class AuctionDao {
 			ResultSet rs=st.executeQuery("SELECT B.CustomerID FROM Bid B, AuctionData A WHERE A.ClosingBid=B.Value AND A.AuctionID=\'"+auctionID+"\'");
 			int customerID= rs.getInt("CustomerID");
 			st.executeUpdate("UPDATE AuctionData SET BuyerID= \'"+customerID+"\'");
-		}catch(Exception e) {
+		} catch(Exception e) {
 			System.out.println(e);
 			return "failure";
 		}
+
 		return "success";
-		
 	}
 
 	public List getAuctionData(String auctionID, String itemID) {
@@ -188,11 +192,10 @@ public class AuctionDao {
 			output.add(bid);
 			output.add(auction);
 			output.add(customer);
-		}catch(Exception e) {
+		} catch(Exception e) {
 			System.out.println(e);
 		}
+
 		return output;
 	}
-
-	
 }

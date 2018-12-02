@@ -47,7 +47,7 @@ public class GetSalesReportController extends HttpServlet {
 		request.setAttribute("items", items);
 		request.setAttribute("year", year);
 		request.setAttribute("month", month);
-		System.out.println(month + year);
+
 		RequestDispatcher rd = request.getRequestDispatcher("showSalesReport.jsp");
 		rd.forward(request, response);
 
