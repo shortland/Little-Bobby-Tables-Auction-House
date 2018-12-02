@@ -26,7 +26,7 @@ public class BidDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs=st.executeQuery("SELECT * FROM Bid WHERE auctionID =\'"+auctionID+"\'");
+			ResultSet rs=st.executeQuery("SELECT * FROM Bid WHERE auctionID ='"+auctionID+"'");
 			while(rs.next()) {
 				Bid bid = new Bid();
 				bid.setAuctionID(rs.getInt("AuctionID"));
@@ -55,7 +55,7 @@ public class BidDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs= st.executeQuery("SELECT* FROM Bid WHERE CustomerID =\'"+customerID+"\'");
+			ResultSet rs= st.executeQuery("SELECT* FROM Bid WHERE CustomerID ='"+customerID+"'");
 			while(rs.next()) {
 				Bid bid = new Bid();
 				bid.setAuctionID(rs.getInt("AuctionID"));
@@ -86,14 +86,23 @@ public class BidDao {
 		 * After inserting the bid data, return the bid details encapsulated in "bid" object
 		 */
 		
-
-		/*Sample data begins*/
-		bid.setAuctionID(123);
-		bid.setCustomerID("123-12-1234");
-		bid.setBidTime("2008-12-11");
-		bid.setBidPrice(currentBid);
-		/*Sample data ends*/
-		
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
+			Statement st = con.createStatement();
+			ResultSet rs= st.executeQuery("SELECT A.AuctionID FROM AuctionData A, ItemData I WHERE A.ItemID='"+itemID+"' AND A.AuctionID = '"+auctionID+"'");
+			if(Integer.toString(rs.getInt("AuctionID")).equals(auctionID)) {
+				st.executeUpdate("INSERT INTO Bid (AuctionID, CustomerID, Value, MaxBid) VALUE('"+auctionID+"', '"+customerID+"', '"+currentBid+"', '"+maxBid+"')");
+				bid.setAuctionID(auctionID);
+				bid.setCustomerID(customerID);
+				bid.setBidPrice(currentBid);
+				bid.setMaxBid(maxBid);
+				return bid;
+			}
+		}catch(Exception e) {
+			System.out.println(e);
+		}
+		//David This will return a bid Object with no attribute in there if the ItemID didn't match the ItemID in AuctionData 
 		return bid;
 	}
 
