@@ -140,7 +140,7 @@ public class EmployeeDao {
 				employee.setState(rs.getString("State"));
 				employee.setZipCode(Integer.parseInt(rs.getString("ZipCode")));
 				employee.setTelephone(rs.getString("Telephone"));
-				employee.setEmployeeID(rs.getString("SocialSecutiy"));
+				employee.setEmployeeID(rs.getString("SocialSecurity"));
 				employee.setHourlyRate(Integer.parseInt(rs.getString("HourlyRate")));
 				employees.add(employee);
 			}
@@ -176,7 +176,7 @@ public class EmployeeDao {
 				employee.setState(rs.getString("State"));
 				employee.setZipCode(Integer.parseInt(rs.getString("ZipCode")));
 				employee.setTelephone(rs.getString("Telephone"));
-				employee.setEmployeeID(rs.getString("SocialSecutiy"));
+				employee.setEmployeeID(rs.getString("SocialSecurity"));
 				employee.setHourlyRate(Integer.parseInt(rs.getString("HourlyRate")));
 			}
 		} catch(Exception e) {
