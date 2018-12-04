@@ -88,7 +88,7 @@ public class ItemDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT I.*, SUM(A.ClosingBid) as Profits FROM AuctionData A, ItemData I, CustomerData C WHERE A.ItemID = I.ItemID AND (I.ItemName LIKE '%" + searchKeyword + "%' OR I.ItemType LIKE '%" + searchKeyword + "%' OR (C.FirstName LIKE '%" + searchKeyword + "%' AND C.CustomerID = A.BuyerID)) AND A.ClosingBid IS NOT NULL AND A.ClosingBid >= A.Reserve GROUP BY I.ItemName");
+			ResultSet rs = st.executeQuery("SELECT I.*, SUM(A.ClosingBid) as Profits FROM AuctionData A, ItemData I, CustomerData C WHERE A.ItemID = I.ItemID AND (I.ItemName LIKE '%" + searchKeyword + "%' OR I.ItemType LIKE '%" + searchKeyword + "%' OR (C.FirstName LIKE '%" + searchKeyword + "%' AND C.CustomerID = A.BuyerID)) AND A.ClosingBid IS NOT NULL AND A.ClosingBid >= A.Reserve GROUP BY I.ItemID");
 			while (rs.next()) {
 				Item item = new Item();
 				item.setName(rs.getString("ItemName"));
