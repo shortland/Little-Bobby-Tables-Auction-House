@@ -10,7 +10,6 @@ import model.Employee;
 import model.Item;
 
 public class ItemDao {
-
 	
 	public List<Item> getItems() {
 		
