@@ -34,23 +34,44 @@ public class CustomerDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT * FROM CustomerData WHERE FirstName LIKE \'%" + searchKeyword +"%\'"
-					+ " or LastName LIKE \'%" + searchKeyword + "%\'");
-			while (rs.next()) {
-				Customer customer = new Customer();
-				customer.setCustomerID(rs.getString("SocialSecurity"));
-				customer.setAddress(rs.getString("Address"));
-				customer.setLastName(rs.getString("LastName"));
-				customer.setFirstName(rs.getString("FirstName"));
-				customer.setCity(rs.getString("City"));
-				customer.setState(rs.getString("State"));
-				customer.setEmail(rs.getString("EmailAddress"));
-				customer.setZipCode(rs.getInt("ZipCode"));
-				customer.setTelephone(rs.getString("Telephone"));
-				customer.setCreditCard(rs.getString("CreditCard"));
-				customer.setRating(rs.getInt("Rating"));
-				customers.add(customer);
+			if(searchKeyword!=null) {
+				ResultSet rs = st.executeQuery("SELECT * FROM CustomerData WHERE FirstName LIKE \'%" + searchKeyword +"%\'"
+						+ " or LastName LIKE \'%" + searchKeyword + "%\'");
+				while (rs.next()) {
+					Customer customer = new Customer();
+					customer.setCustomerID(rs.getString("SocialSecurity"));
+					customer.setAddress(rs.getString("Address"));
+					customer.setLastName(rs.getString("LastName"));
+					customer.setFirstName(rs.getString("FirstName"));
+					customer.setCity(rs.getString("City"));
+					customer.setState(rs.getString("State"));
+					customer.setEmail(rs.getString("EmailAddress"));
+					customer.setZipCode(rs.getInt("ZipCode"));
+					customer.setTelephone(rs.getString("Telephone"));
+					customer.setCreditCard(rs.getString("CreditCard"));
+					customer.setRating(rs.getInt("Rating"));
+					customers.add(customer);
+				}
 			}
+			else {
+				ResultSet rs = st.executeQuery("SELECT * FROM CustomerData ");
+				while (rs.next()) {
+					Customer customer = new Customer();
+					customer.setCustomerID(rs.getString("SocialSecurity"));
+					customer.setAddress(rs.getString("Address"));
+					customer.setLastName(rs.getString("LastName"));
+					customer.setFirstName(rs.getString("FirstName"));
+					customer.setCity(rs.getString("City"));
+					customer.setState(rs.getString("State"));
+					customer.setEmail(rs.getString("EmailAddress"));
+					customer.setZipCode(rs.getInt("ZipCode"));
+					customer.setTelephone(rs.getString("Telephone"));
+					customer.setCreditCard(rs.getString("CreditCard"));
+					customer.setRating(rs.getInt("Rating"));
+					customers.add(customer);
+				}
+			}
+			
 		} catch(Exception e) {
 			System.out.println(e);
 		}
