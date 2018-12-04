@@ -91,7 +91,7 @@ public class AuctionDao {
 		 * employeeEmail is the email ID of the customer representative, which is given as method parameter
 		 */
 		
-		/*Sample data begins*/
+		// TODO: COPIES SOLD!!!
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
@@ -163,7 +163,7 @@ public class AuctionDao {
 		 * The auction details must include details about the item, indicated by auctionID
 		 * All the objects must be added in the "output" list and returned
 		 */
-		/*Sample data begins*/
+
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
