@@ -277,7 +277,7 @@ public class CustomerDao {
 		 * You need to handle the database insertion of the customer details and return "success" or "failure" based on result of the database insertion.
 		 */
 		try {
-			String sql = "INSERT INTO CustomerData (Password, LastName, FirstName, Address, City, State, ZipCode, Telephone, EmailAddress, CreditCard, Rating) VALUES ('"+customer.getPassword()+"', '"+customer.getLastName()+"', '"+customer.getFirstName()+"', '"+customer.getAddress()+"', '"+customer.getCity()+"', '"+customer.getState()+"', '"+customer.getZipCode()+"', '"+customer.getTelephone()+ "', '"+customer.getEmail()+"', '"+customer.getCreditCard()+"', '"+customer.getRating()+"')";
+			String sql = "INSERT INTO CustomerData (SocialSecurity,Password, LastName, FirstName, Address, City, State, ZipCode, Telephone, EmailAddress, CreditCard, Rating) VALUES ('"+ customer.getCustomerID()+"', '"+customer.getPassword()+"', '"+customer.getLastName()+"', '"+customer.getFirstName()+"', '"+customer.getAddress()+"', '"+customer.getCity()+"', '"+customer.getState()+"', '"+customer.getZipCode()+"', '"+customer.getTelephone()+ "', '"+customer.getEmail()+"', '"+customer.getCreditCard()+"', '"+customer.getRating()+"')";
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
