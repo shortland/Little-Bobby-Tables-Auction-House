@@ -121,7 +121,7 @@ public class ItemDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT I.* FROM ItemData I WHERE I.ItemType IN (SELECT DISTINCT I.ItemType FROM ItemData I WHERE I.ItemID IN (SELECT DISTINCT I.ItemID FROM AuctionData A, ItemData I WHERE A.BuyerID = '" + customerID + "' AND A.ItemID = I.ItemID))");
+			ResultSet rs = st.executeQuery("SELECT I.* FROM ItemData I WHERE I.ItemType IN (SELECT DISTINCT I.ItemType FROM ItemData I WHERE I.ItemID IN (SELECT DISTINCT I.ItemID FROM AuctionData A, ItemData I, CustomerData C WHERE A.BuyerID =C.CustomerID AND C.SocialSecurity='"+customerID+"' AND A.ItemID = I.ItemID))");
 			while (rs.next()) {
 				Item item = new Item();
 				item.setItemID(rs.getInt("ItemID"));
