@@ -162,7 +162,7 @@ public class ItemDao {
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
 			//David Changed the SQL Bcus they want to get the highest bid in the auction which is the B.Value = A.CurrentBid
-			ResultSet rs = st.executeQuery("SELECT A.*, I.*, B.* FROM AuctionData A, ItemData I, Bid B WHERE A.SellerID = '" + sellerID + "' AND A.ItemID = I.ItemID AND B.AuctionID = A.AuctionID AND B.Value = A.CurrentBid");
+			ResultSet rs = st.executeQuery("SELECT A.*, I.*, B.* FROM AuctionData A, ItemData I, Bid B, CustomerData C WHERE A.SellerID = C.CustomerID AND C.SocialSecurity= '" + sellerID + "' AND A.ItemID = I.ItemID AND B.AuctionID = A.AuctionID AND B.Value = A.CurrentBid");
 			while (rs.next()) {
 				Item item = new Item();
 				item.setItemID(rs.getInt("ItemID"));
