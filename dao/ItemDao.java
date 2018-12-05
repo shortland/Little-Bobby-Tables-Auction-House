@@ -296,7 +296,7 @@ public class ItemDao {
 				item.setName(rs.getString("ItemName"));
 				items.add(item);
 			}
-			rs= st.executeQuery("SELECT A.* FROM ItemData I, AuctionData A WHERE I.ItemType LIKE '%"+itemType+"%' AND A.ItemID = I.ItemID");
+			rs= st.executeQuery("SELECT A.* FROM ItemData I, AuctionData A WHERE I.ItemType LIKE '%\"+itemType+\"%' AND A.ItemID = I.ItemID AND A.ClosingBidID IS NULL");
 			while (rs.next()) {
 				Auction auction = new Auction();
 				auction.setMinimumBid(rs.getInt("Reserve"));
