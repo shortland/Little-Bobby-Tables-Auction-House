@@ -55,7 +55,7 @@ public class BidDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs= st.executeQuery("SELECT* FROM Bid WHERE CustomerID ='"+customerID+"'");
+			ResultSet rs= st.executeQuery("SELECT B.* FROM Bid B, CustomerData C WHERE C.CustomerID = B.CustomerID AND C.SocialSecurity = '"+customerID+"'");
 			while(rs.next()) {
 				Bid bid = new Bid();
 				bid.setAuctionID(rs.getInt("AuctionID"));
