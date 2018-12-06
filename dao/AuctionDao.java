@@ -60,7 +60,7 @@ public class AuctionDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT * FROM AuctionData A WHERE A.SellerID = \'"+ customerID+"\' OR A.BuyerID = \'"+customerID+"\'");
+			ResultSet rs = st.executeQuery("SELECT * FROM AuctionData A WHERE A.SellerID = '"+ customerID+"' OR A.BuyerID = '"+customerID+"'");
 		
 			while(rs.next()) {
 				Auction auction = new Auction();
@@ -96,7 +96,7 @@ public class AuctionDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT A.* FROM AuctionData A, EmployeeData E WHERE A.EmployeeID = E.EmployeeID AND E.EmailAddress =\'"+employeeEmail+"\' AND A.ClosingDate>CURRENT_TIMESTAMP");
+			ResultSet rs = st.executeQuery("SELECT A.* FROM AuctionData A, EmployeeData E WHERE A.EmployeeID = E.EmployeeID AND E.EmailAddress ='"+employeeEmail+"' AND A.ClosingDate>CURRENT_TIMESTAMP");
 			while(rs.next()) {
 				Auction auction = new Auction();
 				auction.setAuctionID(rs.getInt("AuctionID"));
@@ -129,9 +129,9 @@ public class AuctionDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs=st.executeQuery("SELECT B.CustomerID FROM Bid B, AuctionData A WHERE A.ClosingBid=B.Value AND A.AuctionID=\'"+auctionID+"\'");
+			ResultSet rs=st.executeQuery("SELECT B.CustomerID FROM Bid B, AuctionData A WHERE A.ClosingBid=B.Value AND A.AuctionID='"+auctionID+"'");
 			int customerID= rs.getInt("CustomerID");
-			st.executeUpdate("UPDATE AuctionData SET BuyerID= \'"+customerID+"\'");
+			st.executeUpdate("UPDATE AuctionData SET BuyerID= '"+customerID+"'");
 		} catch(Exception e) {
 			System.out.println(e);
 			return "failure";
