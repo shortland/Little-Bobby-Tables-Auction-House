@@ -241,7 +241,7 @@ public class ItemDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT I.*, A.* FROM ItemData I, AuctionData A WHERE I.ItemID = A.ItemID AND I.ItemName LIKE '%" + itemName + "%' AND A.ClosingBidID IS NULL);
+			ResultSet rs = st.executeQuery("SELECT I.*, A.* FROM ItemData I, AuctionData A WHERE I.ItemID = A.ItemID AND I.ItemName LIKE '%" + itemName + "%' AND A.ClosingBidID IS NULL");
 			while (rs.next()) {
 				Item item = new Item();
 				item.setItemID(rs.getInt("ItemID"));
