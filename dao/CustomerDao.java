@@ -57,7 +57,7 @@ public class CustomerDao {
 				ResultSet rs = st.executeQuery("SELECT * FROM CustomerData ");
 				while (rs.next()) {
 					Customer customer = new Customer();
-					customer.setCustomerID(rs.getString("SocialSecurity"));
+					customer.setCustomerID(rs.getString("CustomerID"));
 					customer.setAddress(rs.getString("Address"));
 					customer.setLastName(rs.getString("LastName"));
 					customer.setFirstName(rs.getString("FirstName"));
