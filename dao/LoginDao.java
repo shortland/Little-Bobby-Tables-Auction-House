@@ -19,7 +19,7 @@ public class LoginDao {
 		 * Query to verify the username and password and fetch the role of the user, must be implemented
 		 */
 		String authorizationLevel = "";
-		String password="";
+		String pWord="";
 		String email="";
 
 		try {
@@ -30,15 +30,15 @@ public class LoginDao {
 			while (rs.next()) {
 				authorizationLevel = rs.getString("AuthorizationLevel");
 				email= rs.getString("EmailAddress");
-				password= rs.getString("Password")
+				pWord= rs.getString("Password")
 			}
 		} catch(Exception e) {
 			System.out.println(e);
 		}
 		Login login = new Login();
 		login.setRole(authorizationLevel);
-		login.setUserName(email);
-		login.setPassword(password);
+		login.setUsername(email);
+		login.setPassword(pWord);
 		if (authorizationLevel.equals("")) {
 			return null;
 		} else {
