@@ -39,7 +39,7 @@ public class CustomerDao {
 						+ " or LastName LIKE \'%" + searchKeyword + "%\'");
 				while (rs.next()) {
 					Customer customer = new Customer();
-					customer.setCustomerID(rs.getString("SocialSecurity"));
+					customer.setCustomerID(rs.getString("CustomerID"));
 					customer.setAddress(rs.getString("Address"));
 					customer.setLastName(rs.getString("LastName"));
 					customer.setFirstName(rs.getString("FirstName"));
@@ -94,7 +94,7 @@ public class CustomerDao {
 			ResultSet rs = st.executeQuery("SELECT C.*, SUM(Z.ClosingBid) as Profits FROM AuctionData Z, ItemData I, CustomerData C WHERE Z.ItemID = I.ItemID AND Z.SellerID = C.CustomerID AND Z.ClosingBid IS NOT NULL AND Z.ClosingBid >= Z.Reserve GROUP BY C.CustomerID LIMIT 1");
 			
 			while (rs.next()) {
-				customer.setCustomerID(rs.getString("SocialSecurity"));
+				customer.setCustomerID(rs.getString("CustomerID"));
 				customer.setAddress(rs.getString("Address"));
 				customer.setLastName(rs.getString("LastName"));
 				customer.setFirstName(rs.getString("FirstName"));
@@ -131,7 +131,7 @@ public class CustomerDao {
 			ResultSet rs= st.executeQuery("SELECT * FROM CustomerData");
 			while(rs.next()) {
 				Customer customer = new Customer();
-				customer.setCustomerID(Integer.toString(rs.getInt("SocialSecurity")));
+				customer.setCustomerID(Integer.toString(rs.getInt("CustomerID")));
 				customer.setAddress(rs.getString("Address"));
 				customer.setLastName(rs.getString("LastName"));
 				customer.setFirstName(rs.getString("FirstName"));
