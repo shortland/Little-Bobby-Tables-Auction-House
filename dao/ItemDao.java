@@ -3,7 +3,6 @@ package dao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
 import model.Auction;
 import model.Bid;
 import model.Employee;
