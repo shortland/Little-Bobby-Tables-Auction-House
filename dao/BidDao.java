@@ -55,7 +55,7 @@ public class BidDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs= st.executeQuery("SELECT B.* FROM Bid B, CustomerData C WHERE C.CustomerID = B.CustomerID AND C.SocialSecurity = '"+customerID+"'");
+			ResultSet rs= st.executeQuery("SELECT B.* FROM Bid B WHERE B.CustomerID = '"+customerID+"'");
 			while(rs.next()) {
 				Bid bid = new Bid();
 				bid.setAuctionID(rs.getInt("AuctionID"));
@@ -90,7 +90,7 @@ public class BidDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs= st.executeQuery("SELECT A.AuctionID FROM AuctionData A, ItemData I WHERE A.ItemID='"+itemID+"' AND A.AuctionID = '"+auctionID+"'");
+			ResultSet rs= st.executeQuery("SELECT A.AuctionID FROM AuctionData A, ItemData I WHERE A.ItemID='"+itemID+"' AND A.AuctionID = '"+auctionID+"' GROUP BY A.AuctionID");
 			if (Integer.toString(rs.getInt("AuctionID")).equals(auctionID)) {
 				st.executeUpdate("INSERT INTO Bid (AuctionID, CustomerID, Value, MaxBid) VALUE('"+auctionID+"', '"+customerID+"', '"+currentBid+"', '"+maxBid+"')");
 				bid.setAuctionID(Integer.parseInt(auctionID));
@@ -98,6 +98,12 @@ public class BidDao {
 				bid.setBidPrice(currentBid);
 				bid.setMaxBid(maxBid);
 				return bid;
+			}
+			//David TODO I already assume we are going to get rid of the old ID and use the SSN AS THE REAL ID
+			rs=st.executeQuery("SELECT A.CurrentBid, A.Increment, B.* FROM AuctionData A, Bid B, CustomerData C WHERE A.AuctionID ='"+auctionID+"' AND A.CurrentHighBid=B.MaxBid AND B.CustomerID!='"+customerID+"' GROUP BY BidNum");
+			if(rs.next()) {
+				int x= rs.getInt("CurrentBid")+rs.getInt("Increment");
+				st.executeUpdate("INSERT INTO Bid (AuctionID, CustomerID, Value, MaxBid) VALUE('"+auctionID+"', '"+rs.getString("CustomerID")+"', '"+x+"', '"+rs.getInt("MaxBid")+"')");
 			}
 		}catch(Exception e) {
 			System.out.println(e);
@@ -121,7 +127,6 @@ public class BidDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			//David TODO The SQL is working but it gives the same Bid multiple times 
 			ResultSet rs= st.executeQuery("(SELECT B.* FROM Bid B, AuctionData A, ItemData I WHERE A.ClosingBidID = B.BidNum AND A.ItemID = I.ItemID AND I.ItemName LIKE '%" + searchKeyword + "%') UNION (SELECT B.* FROM Bid B, AuctionData A, CustomerData C WHERE A.ClosingBidID = B.BidNum AND C.FirstName LIKE '%" + searchKeyword + "%') UNION (SELECT B.* FROM Bid B, AuctionData A, CustomerData C WHERE A.ClosingBidID = B.BidNum AND C.LastName LIKE '%" + searchKeyword + "%')");
 			while(rs.next()) {
 				Bid bid = new Bid();
