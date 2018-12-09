@@ -119,7 +119,7 @@ public class ItemDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT I.* FROM ItemData I WHERE I.ItemType IN (SELECT DISTINCT I.ItemType FROM ItemData I WHERE I.ItemID IN (SELECT DISTINCT I.ItemID FROM AuctionData A, ItemData I, CustomerData C WHERE A.BuyerID = '"+customerID+"' AND A.ItemID = I.ItemID))");
+			ResultSet rs = st.executeQuery("SELECT I.* FROM ItemData I WHERE I.ItemType IN (SELECT DISTINCT I.ItemType FROM ItemData I WHERE I.ItemID IN (SELECT DISTINCT I.ItemID FROM AuctionData A, ItemData I, CustomerData C WHERE A.BuyerID =C.CustomerID AND C.CustomerID='"+customerID+"' AND A.ItemID = I.ItemID))");
 			while (rs.next()) {
 				Item item = new Item();
 				item.setItemID(rs.getInt("ItemID"));
@@ -161,7 +161,7 @@ public class ItemDao {
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
 			//David Changed the SQL Bcus they want to get the highest bid in the auction which is the B.Value = A.CurrentBid
-			ResultSet rs = st.executeQuery("SELECT A.*, I.*, B.* FROM AuctionData A, ItemData I, Bid B, CustomerData C WHERE A.SellerID = '" + sellerID + "' AND A.ItemID = I.ItemID AND B.AuctionID = A.AuctionID AND B.Value = A.CurrentBid GROUP BY A.AuctionID, B.BidNum");
+			ResultSet rs = st.executeQuery("SELECT A.*, I.*, B.* FROM AuctionData A, ItemData I, Bid B, CustomerData C WHERE A.SellerID = C.CustomerID AND C.CustomerID = '" + sellerID + "' AND A.ItemID = I.ItemID AND B.AuctionID = A.AuctionID AND B.Value = A.CurrentBid");
 			while (rs.next()) {
 				Item item = new Item();
 				item.setItemID(rs.getInt("ItemID"));
@@ -295,7 +295,7 @@ public class ItemDao {
 				item.setName(rs.getString("ItemName"));
 				items.add(item);
 			}
-			rs= st.executeQuery("SELECT A.* FROM ItemData I, AuctionData A WHERE I.ItemType LIKE '%"+itemType+"%' AND A.ItemID = I.ItemID AND A.ClosingBidID IS NULL");
+			rs= st.executeQuery("SELECT A.* FROM ItemData I, AuctionData A WHERE I.ItemType LIKE '%\"+itemType+\"%' AND A.ItemID = I.ItemID AND A.ClosingBidID IS NULL");
 			while (rs.next()) {
 				Auction auction = new Auction();
 				auction.setMinimumBid(rs.getInt("Reserve"));
