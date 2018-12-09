@@ -31,7 +31,7 @@ public class PostDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();			
-			ResultSet rs = st.executeQuery("SELECT I.ItemName, I.ItemID, I.ItemType, I.YearManufactured, COUNT(I.ItemID) AS CopiesSold, SUM(A.ClosingBid) AS Profits FROM AuctionData A, ItemData I WHERE I.ItemID = A.ItemID AND MONTH(A.ClosingDate) = " + dateData[0] + " AND YEAR(A.ClosingDate) = " + dateData[1] + " GROUP BY I.ItemID");
+			ResultSet rs = st.executeQuery("SELECT I.ItemName, I.ItemID, I.ItemType, I.YearManufactured, COUNT(I.ItemID) AS CopiesSold, SUM(B.Value) AS Profits FROM AuctionData A, ItemData I, Bid B WHERE I.ItemID = A.ItemID AND MONTH(A.ClosingDate) = '" + dateData[0] + "' AND YEAR(A.ClosingDate) = '" + dateData[1] + "' AND A.ClosingBidID IS NOT NULL AND A.ClosingBidID = B.BidNum GROUP BY I.ItemID");
 
 			while (rs.next()) {
 				Item item = new Item();
