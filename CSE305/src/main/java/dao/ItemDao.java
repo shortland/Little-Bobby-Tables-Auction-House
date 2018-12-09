@@ -9,7 +9,6 @@ import model.Employee;
 import model.Item;
 
 public class ItemDao {
-	
 	public List<Item> getItems() {
 		
 		/*
@@ -55,7 +54,7 @@ public class ItemDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT I.ItemID, I.ItemDescription, I.ItemName, I.ItemType, COUNT(A.ItemID) as AmountSold FROM AuctionData A, ItemData I WHERE I.ItemID = A.ItemID AND A.ClosingBid IS NOT NULL AND A.ClosingBid >= A.Reserve GROUP BY A.ItemID ORDER BY COUNT(ItemID) DESC");
+			ResultSet rs = st.executeQuery("SELECT I.ItemID, I.ItemDescription, I.ItemName, I.ItemType, COUNT(A.ItemID) as AmountSold FROM AuctionData A, ItemData I WHERE I.ItemID = A.ItemID AND A.ClosingBidID IS NOT NULL GROUP BY A.ItemID ORDER BY COUNT(ItemID) DESC");
 			while (rs.next()) {
 				Item item = new Item();
 				item.setItemID(rs.getInt("ItemID"));
@@ -87,7 +86,7 @@ public class ItemDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT I.*, SUM(A.ClosingBid) as Profits FROM AuctionData A, ItemData I, CustomerData C WHERE A.ItemID = I.ItemID AND (I.ItemName LIKE '%" + searchKeyword + "%' OR I.ItemType LIKE '%" + searchKeyword + "%' OR (C.FirstName LIKE '%" + searchKeyword + "%' AND C.CustomerID = A.BuyerID)) AND A.ClosingBid IS NOT NULL AND A.ClosingBid >= A.Reserve GROUP BY I.ItemID");
+			ResultSet rs = st.executeQuery("SELECT I.ItemID, I.ItemName, I.ItemType, I.ItemDescription, SUM(B.Value) AS Profits FROM AuctionData A, ItemData I, Bid B, CustomerData C WHERE A.ItemID = I.ItemID AND (I.ItemName LIKE '%" + searchKeyword + "%' OR I.ItemType LIKE '%" + searchKeyword + "%' OR C.FirstName LIKE '%" + searchKeyword + "%') AND A.ClosingBidID IS NOT NULL AND A.ClosingBidID = B.BidNum AND C.CustomerID = B.CustomerID GROUP BY I.ItemID");
 			while (rs.next()) {
 				Item item = new Item();
 				item.setName(rs.getString("ItemName"));
@@ -119,6 +118,7 @@ public class ItemDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("SELECT I.* FROM ItemData I WHERE I.ItemType IN (SELECT DISTINCT I.ItemType FROM ItemData I WHERE I.ItemID IN (SELECT DISTINCT I.ItemID FROM AuctionData A, ItemData I, CustomerData C, Bid B WHERE A.ClosingBidID = B.BidNum AND A.ItemID = I.ItemID AND B.CustomerID='"+customerID+"'))");
 			ResultSet rs = st.executeQuery("SELECT I.* FROM ItemData I WHERE I.ItemType IN (SELECT DISTINCT I.ItemType FROM ItemData I WHERE I.ItemID IN (SELECT DISTINCT I.ItemID FROM AuctionData A, ItemData I, CustomerData C WHERE A.BuyerID =C.CustomerID AND C.CustomerID='"+customerID+"' AND A.ItemID = I.ItemID))");
 			while (rs.next()) {
 				Item item = new Item();
@@ -160,8 +160,8 @@ public class ItemDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			//David Changed the SQL Bcus they want to get the highest bid in the auction which is the B.Value = A.CurrentBid
-			ResultSet rs = st.executeQuery("SELECT A.*, I.*, B.* FROM AuctionData A, ItemData I, Bid B, CustomerData C WHERE A.SellerID = C.CustomerID AND C.CustomerID = '" + sellerID + "' AND A.ItemID = I.ItemID AND B.AuctionID = A.AuctionID AND B.Value = A.CurrentBid");
+			//TODO David There is a sold price column
+			ResultSet rs = st.executeQuery("SELECT A.*, I.*, B.* FROM AuctionData A, ItemData I, Bid B, CustomerData C WHERE A.SellerID = '"+sellerID+"' AND A.ItemID = I.ItemID AND B.BidNum = A.CurrentBidID GROUP BY A.AuctionID, B.BidNum");
 			while (rs.next()) {
 				Item item = new Item();
 				item.setItemID(rs.getInt("ItemID"));
@@ -171,8 +171,26 @@ public class ItemDao {
 				items.add(item);
 				
 				Bid bid = new Bid();
-				bid.setCustomerID(rs.getString("BuyerID"));
-				bid.setBidPrice(rs.getInt("CurrentBid"));
+				bid.setCustomerID(rs.getString("CustomerID"));
+				bid.setBidPrice(rs.getInt("Value"));
+				bids.add(bid);
+				
+				Auction auction = new Auction();
+				auction.setMinimumBid(rs.getInt("Reserve"));
+				auction.setBidIncrement(rs.getInt("Increment"));
+				auction.setAuctionID(rs.getInt("AuctionID"));
+				auctions.add(auction);
+			}
+			rs=st.executeQuery("SELECT A.*, I.* FROM AuctionData A, ItemData I WHERE A.SellerID='"+sellerID+"' AND A.ItemID=I.ItemID AND A.CurrentBidID IS NULL GROUP BY A.AuctionID");
+			while(rs.next()) {
+				Item item = new Item();
+				item.setItemID(rs.getInt("ItemID"));
+				item.setDescription(rs.getString("ItemDescription"));
+				item.setType(rs.getString("ItemType"));
+				item.setName(rs.getString("ItemName"));
+				items.add(item);
+				
+				Bid bid = new Bid();
 				bids.add(bid);
 				
 				Auction auction = new Auction();
@@ -184,11 +202,9 @@ public class ItemDao {
 		} catch(Exception e) {
 			System.out.println(e);
 		}
-		
 		output.add(items);
 		output.add(bids);
 		output.add(auctions);
-		
 		return output;
 	}
 
@@ -240,7 +256,7 @@ public class ItemDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT I.*, A.* FROM ItemData I, AuctionData A WHERE I.ItemID = A.ItemID AND I.ItemName LIKE '%" + itemName + "%' AND A.ClosingBidID IS NULL");
+			ResultSet rs = st.executeQuery("SELECT I.*, A.* FROM ItemData I, AuctionData A WHERE I.ItemID = A.ItemID AND I.ItemName LIKE '%" + itemName + "%' AND A.ClosingBidID IS NULL AND A.ClosingDate>CURRENT_TIMESTAMP ");
 			while (rs.next()) {
 				Item item = new Item();
 				item.setItemID(rs.getInt("ItemID"));
@@ -286,7 +302,7 @@ public class ItemDao {
 			Statement st = con.createStatement();
 			// David Changed bcuz fetch items containing itemType as their type and each item's corresponding auction data also has to be fetched
 			// David Changed the Method to run 2 different SQL
-			ResultSet rs = st.executeQuery("SELECT I.* FROM ItemData I, AuctionData A WHERE I.ItemType LIKE '%"+itemType+"%' GROUP BY I.ItemID");
+			ResultSet rs = st.executeQuery("SELECT I.*, A.* FROM ItemData I, AuctionData A WHERE I.ItemType LIKE '%"+itemType+"%' AND A.ItemID=I.ItemID AND A.CLosingBidID IS NULL AND A.ClosingDate> CURRENT_TIMESTAMP");
 			while (rs.next()) {
 				Item item = new Item();
 				item.setItemID(rs.getInt("ItemID"));
@@ -295,13 +311,14 @@ public class ItemDao {
 				item.setName(rs.getString("ItemName"));
 				items.add(item);
 			}
-			rs= st.executeQuery("SELECT A.* FROM ItemData I, AuctionData A WHERE I.ItemType LIKE '%\"+itemType+\"%' AND A.ItemID = I.ItemID AND A.ClosingBidID IS NULL");
+			rs= st.executeQuery("SELECT A.* FROM ItemData I, AuctionData A WHERE I.ItemType LIKE '%"+itemType+"%' AND A.ItemID = I.ItemID AND A.ClosingBidID IS NULL");
 			while (rs.next()) {
 				Auction auction = new Auction();
 				auction.setMinimumBid(rs.getInt("Reserve"));
 				auction.setBidIncrement(rs.getInt("Increment"));
 				auctions.add(auction);
 			}
+
 		} catch(Exception e) {
 			System.out.println(e);
 		}
@@ -327,7 +344,7 @@ public class ItemDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT I.ItemID, I.ItemDescription, I.ItemName, I.ItemType, COUNT(A.ItemID) as AmountSold FROM AuctionData A, ItemData I WHERE I.ItemID = A.ItemID AND A.ClosingBid IS NOT NULL AND A.ClosingBid >= A.Reserve GROUP BY A.ItemID ORDER BY COUNT(ItemID) DESC");
+			ResultSet rs = st.executeQuery("SELECT I.ItemID, I.ItemDescription, I.ItemName, I.ItemType, COUNT(A.ItemID) as AmountSold FROM AuctionData A, ItemData I, Bid B WHERE I.ItemID = A.ItemID AND A.ClosingBidID IS NOT NULL AND A.ClosingBidID = B.BidNum AND B.Value >= A.Reserve GROUP BY A.ItemID ORDER BY COUNT(ItemID) DESC");
 			while (rs.next()) {
 				Item item = new Item();
 				item.setItemID(rs.getInt("ItemID"));
