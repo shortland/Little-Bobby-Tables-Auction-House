@@ -91,7 +91,7 @@ public class CustomerDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT C.*, SUM(Z.ClosingBid) as Profits FROM AuctionData Z, ItemData I, CustomerData C WHERE Z.ItemID = I.ItemID AND Z.SellerID = C.CustomerID AND Z.ClosingBid IS NOT NULL AND Z.ClosingBid >= Z.Reserve GROUP BY C.CustomerID LIMIT 1");
+			ResultSet rs = st.executeQuery("SELECT C.*, SUM(Z.ClosingBid) as Profits FROM AuctionData Z, ItemData I, CustomerData C WHERE Z.ItemID = I.ItemID AND Z.SellerID = C.CustomerID AND Z.ClosingBidID IS NOT NULL GROUP BY C.CustomerID LIMIT 1");
 			
 			while (rs.next()) {
 				customer.setCustomerID(rs.getString("CustomerID"));
