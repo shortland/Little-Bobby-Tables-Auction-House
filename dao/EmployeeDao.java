@@ -13,7 +13,6 @@ public class EmployeeDao {
 	 */
 	
 	public String addEmployee(Employee employee) {
-
 		/*
 		 * All the values of the add employee form are encapsulated in the employee object.
 		 * These can be accessed by getter methods (see Employee class in model package).
@@ -41,7 +40,7 @@ public class EmployeeDao {
 			preparedStmt.setString (11, employee.getState());
 			preparedStmt.setString (12, employee.getTelephone());
 			preparedStmt.setString (13, "" + employee.getZipCode());
-			preparedStmt.execute();
+			preparedStmt.executeUpdate();
 		} catch(Exception e) {
 			System.out.println(e);
 			return "error";
