@@ -35,12 +35,16 @@
 	    <label for="employeeEmail">Email address</label>
 	    <input type="email" class="form-control" id="employeeEmail" name="employeeEmail" placeholder="Enter email" value="${editEmployee.email}" required>
 	  </div>
+	  <div class="form-group">
+	    <label for="employeePassword">Password</label>
+	    <input type="text" class="form-control" id="employeePassword" name="employeePassword" placeholder="Password" value="${editEmployee.password}" readonly>
+	  </div>
   	  <div class="form-group">
 	    <label for="employeeFirstName">First Name</label>
 	    <input type="text" class="form-control" id="employeeFirstName" name="employeeFirstName" placeholder="First Name" value="${editEmployee.firstName}" required>
 	  </div>
   	  <div class="form-group">
-	    <label for="employeeLastName">last Name</label>
+	    <label for="employeeLastName">Last Name</label>
 	    <input type="text" class="form-control" id="employeeLastName" name="employeeLastName" placeholder="Last Name" value="${editEmployee.lastName}" required>
 	  </div>
    	  <div class="form-group">

@@ -34,6 +34,7 @@
 		  <thead>
 		    <tr>
 		      <th>Employee ID</th>
+		      <th>Password</th>
 		      <th>First Name</th>
 		      <th>Last Name</th>
 		      <th>Address</th>
@@ -52,6 +53,7 @@
 		     <c:forEach items="${employees}" var="cd">
 		       <tr>
 		         <td>${cd.employeeID}</td>
+		         <td>${cd.password}</td>
 		         <td>${cd.firstName}</td>
 		         <td>${cd.lastName}</td>
 		         <td>${cd.address}</td>
