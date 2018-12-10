@@ -10,7 +10,7 @@ Shih-Chuan Lin - shih-chuan.lin@stonybrook.edu
 
 ## Compiled War File
 
-The compiled war file can be found in the root directory of the project [LittleBobbyTablesAuctionHouse.war](https://github.com/shortland/CSE305/blob/eclipse-stuff/LittleBobbyTablesAuctionHouse.war)
+The compiled war file can be found in the root directory of the project [CSE305.war](https://github.com/shortland/CSE305/blob/eclipse-stuff/CSE305.war)
 
 ## Database
 
