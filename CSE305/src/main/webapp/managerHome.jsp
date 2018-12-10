@@ -39,8 +39,8 @@
 
 			%>
 			
-			<div class="row">
-				<div class="col">
+			<div class="col">
+				<div class="row">
 					<div class="card">
 					  <div class="card-body">
 					    <h5 class="card-title">Manage Employee</h5>
@@ -56,7 +56,7 @@
 					  </div>
 					</div>
 				</div>
-				<div class="col">
+				<div class="row">
 					<div class="card">
 					  <div class="card-body">
 					    <h5 class="card-title">Sales Report</h5>
@@ -68,7 +68,7 @@
 					  </div>
 					</div>
 				</div>
-				<div class="col">
+				<div class="row">
 					<div class="card">
 					  <div class="card-body">
 					    <h5 class="card-title">View Items</h5>
@@ -80,7 +80,7 @@
 					  </div>
 					</div>
 				</div>
-				<div class="col">
+				<div class="row">
 					<div class="card">
 					  <div class="card-body">
 					    <h5 class="card-title">View Sales</h5>
@@ -92,7 +92,7 @@
 					  </div>
 					</div>
 				</div>
-				<div class="col">
+				<div class="row">
 					<div class="card">
 					  <div class="card-body">
 					    <h5 class="card-title">View Revenue Summary</h5>
@@ -104,7 +104,7 @@
 					  </div>
 					</div>
 				</div>
-				<div class="col">
+				<div class="row">
 					<div class="card">
 					  <div class="card-body">
 					    <h5 class="card-title">View Highest Revenue Generators</h5>
@@ -120,7 +120,7 @@
 					  </div>
 					</div>
 				</div>
-				<div class="col">
+				<div class="row">
 					<div class="card">
 					  <div class="card-body">
 					    <h5 class="card-title">View Bestseller Items</h5>
