@@ -15,7 +15,7 @@
 		<link href="webjars/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" />
 		<title>Login | Online Auction House</title>
 	</head>
-	<body style="background-color:#DCDCDC>
+	<body style="background-color:#DCDCDC">
 	
 		<h1>Welcome to the Online Auction House</h1>
 		<div class="container">
