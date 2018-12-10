@@ -38,8 +38,8 @@
 			}
 			%>
 			
-			<div class="row">
-				<div class="col">
+			<div class="col">
+				<div class="row">
 					<div class="card">
 					  <div class="card-body">
 					    <h5 class="card-title">View Bid History</h5>
@@ -51,7 +51,7 @@
 					  </div>
 					</div>
 				</div>
-				<div class="col">
+				<div class="row">
 					<div class="card">
 					  <div class="card-body">
 					    <h5 class="card-title">History of all auctions participated in</h5>
@@ -63,7 +63,7 @@
 					  </div>
 					</div>
 				</div>
-				<div class="col">
+				<div class="row">
 					<div class="card">
 					  <div class="card-body">
 					    <h5 class="card-title">Items sold by Seller</h5>
@@ -75,7 +75,7 @@
 					  </div>
 					</div>
 				</div>
-				<div class="col">
+				<div class="row">
 					<div class="card">
 					  <div class="card-body">
 					    <h5 class="card-title">View Items in Auctions</h5>
@@ -87,7 +87,7 @@
 					  </div>
 					</div>
 				</div>
-				<div class="col">
+				<div class="row">
 					<div class="card">
 					  <div class="card-body">
 					    <h5 class="card-title">View Best Seller Items</h5>
@@ -99,7 +99,7 @@
 					  </div>
 					</div>
 				</div>
-				<div class="col">
+				<div class="row">
 					<div class="card">
 					  <div class="card-body">
 					    <h5 class="card-title">Personalized Item Suggestion List</h5>
