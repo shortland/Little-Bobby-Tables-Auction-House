@@ -96,7 +96,7 @@ public class AuctionDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT A.* FROM AuctionData A, EmployeeData E WHERE A.EmployeeID = E.EmployeeID AND E.EmailAddress ='"+employeeEmail+"' AND A.ClosingDate>CURRENT_TIMESTAMP");
+			ResultSet rs = st.executeQuery("SELECT A.* FROM AuctionData A WHERE A.ClosingDate>CURRENT_TIMESTAMP AND A.ClosingBidID IS NULL GROUP BY A.AuctionID");
 			while(rs.next()) {
 				Auction auction = new Auction();
 				auction.setAuctionID(rs.getInt("AuctionID"));
@@ -124,15 +124,12 @@ public class AuctionDao {
 		 * The method should return a "success" string if the update is successful, else return "failure"
 		 */
 		
-		//David TODO Not sure what this method want. Assuming it want us to update the AuctionData's BuyerID to the Customer's ID who posted the bid value that matches the closing bid
+		//David TODO Assume Close the Auction
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs=st.executeQuery("SELECT B.CustomerID B.BidNum FROM Bid B, AuctionData A WHERE A.ClosingBid=B.Value AND A.AuctionID='"+auctionID+"'");
-			int customerID= rs.getInt("CustomerID");
-			int bidNum=rs.getInt("BidNum");
-			st.executeUpdate("UPDATE AuctionData SET BuyerID= '"+customerID+"', ClosingBidID = '"+bidNum+"'");
+			st.executeUpdate("UPDATE AuctionData SET ClosingBidID = CurrentBidID, ClosingDate = CURRENT_TIMESTAMP WHERE AuctionID= '"+auctionID+"'");
 		} catch(Exception e) {
 			System.out.println(e);
 			return "failure";
@@ -169,26 +166,47 @@ public class AuctionDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs=st.executeQuery("SELECT I.*, MAX(B.Value), C.FirstName, C.LastName, C.CustomerID, A.* FROM ItemData I, Bid B, AuctionData A, CustomerData C WHERE A.AuctionID='"+auctionID+"' AND A.ItemID='"+itemID+"' AND A.ItemID = I.ItemID AND B.AuctionID= A.AuctionID AND B.CustomerID = C.CustomerID AND A.BuyerID= C.CustomerID");
-			while(rs.next()) {
-				item.setItemID(rs.getInt("ItemID"));
-				item.setDescription(rs.getString("ItemDescription"));
-				item.setType(rs.getString("ItemType"));
-				item.setName(rs.getString("ItemName"));
+			boolean isCurrentBidIDNull=false;
+			ResultSet r= st.executeQuery("SELECT A.*, I.* FROM AuctionData A, ItemData I WHERE A.AuctionID='"+auctionID+"' AND A.ItemID='"+itemID+"'AND A.CurrentBidID IS NULL AND A.ItemID=I.ItemID");
+			while(r.next()) {
 				
-				bid.setCustomerID(Integer.toString(rs.getInt("CustomerID")));
-				bid.setBidPrice(rs.getFloat("Value"));
+				item.setItemID(r.getInt("ItemID"));
+				item.setDescription(r.getString("ItemDescription"));
+				item.setType(r.getString("ItemType"));
+				item.setName(r.getString("ItemName"));
 				
-				customer.setCustomerID(Integer.toString(rs.getInt("CustomerID")));
-				customer.setFirstName(rs.getString("FirstName"));
-				customer.setLastName(rs.getString("LastName"));
-				
-				auction.setMinimumBid(rs.getInt("OpeningBid"));
-				auction.setBidIncrement(rs.getInt("Increment"));
-				auction.setCurrentBid(rs.getInt("CurrentBid"));
-				auction.setCurrentHighBid(rs.getInt("CurrentHighBid"));
-				auction.setAuctionID(rs.getInt("AuctionID"));
+				auction.setMinimumBid(r.getInt("Reserve"));
+				auction.setBidIncrement(r.getInt("Increment"));
+				auction.setCurrentBid(r.getInt("Reserve"));
+				auction.setCurrentHighBid(r.getInt("CurrentHighBid"));
+				auction.setAuctionID(r.getInt("AuctionID"));
 			}
+			if(item.getItemID()==Integer.parseInt(itemID)) {
+				isCurrentBidIDNull=true;
+			}
+			if(isCurrentBidIDNull==false) {
+				ResultSet rs=st.executeQuery("SELECT I.*, B.Value, C.FirstName, C.LastName, C.CustomerID, A.* FROM ItemData I, Bid B, AuctionData A, CustomerData C WHERE A.AuctionID='"+auctionID+"' AND A.ItemID='"+itemID+"' AND A.ItemID = I.ItemID AND B.BidNum = A.CurrentBidID AND B.CustomerID = C.CustomerID");
+				while(rs.next()) {
+					item.setItemID(rs.getInt("ItemID"));
+					item.setDescription(rs.getString("ItemDescription"));
+					item.setType(rs.getString("ItemType"));
+					item.setName(rs.getString("ItemName"));
+					
+					bid.setCustomerID(Integer.toString(rs.getInt("CustomerID")));
+					bid.setBidPrice(rs.getInt("Value"));
+					
+					customer.setCustomerID(Integer.toString(rs.getInt("CustomerID")));
+					customer.setFirstName(rs.getString("FirstName"));
+					customer.setLastName(rs.getString("LastName"));
+					
+					auction.setMinimumBid(rs.getInt("Reserve"));
+					auction.setBidIncrement(rs.getInt("Increment"));
+					auction.setCurrentBid(rs.getInt("Value"));
+					auction.setCurrentHighBid(rs.getInt("CurrentHighBid"));
+					auction.setAuctionID(rs.getInt("AuctionID"));
+				}
+			}
+			
 			output.add(item);
 			output.add(bid);
 			output.add(auction);
