@@ -96,7 +96,7 @@ public class AuctionDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT A.* FROM AuctionData A, EmployeeData E WHERE A.EmployeeID = E.EmployeeID AND E.EmailAddress ='"+employeeEmail+"' AND A.ClosingDate>CURRENT_TIMESTAMP");
+			ResultSet rs = st.executeQuery("SELECT A.* FROM AuctionData A WHERE A.ClosingDate>CURRENT_TIMESTAMP AND A.ClosingBidID IS NULL GROUP BY A.AuctionID");
 			while(rs.next()) {
 				Auction auction = new Auction();
 				auction.setAuctionID(rs.getInt("AuctionID"));
@@ -124,15 +124,12 @@ public class AuctionDao {
 		 * The method should return a "success" string if the update is successful, else return "failure"
 		 */
 		
-		//David TODO Not sure what this method want. Assuming it want us to update the AuctionData's BuyerID to the Customer's ID who posted the bid value that matches the closing bid
+		//David TODO Assume Close the Auction
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
-			ResultSet rs=st.executeQuery("SELECT B.CustomerID B.BidNum FROM Bid B, AuctionData A WHERE A.ClosingBid=B.Value AND A.AuctionID='"+auctionID+"'");
-			int customerID= rs.getInt("CustomerID");
-			int bidNum=rs.getInt("BidNum");
-			st.executeUpdate("UPDATE AuctionData SET BuyerID= '"+customerID+"', ClosingBidID = '"+bidNum+"'");
+			st.executeUpdate("UPDATE AuctionData SET ClosingBidID = CurrentBidID, ClosingDate = CURRENT_TIMESTAMP WHERE AuctionID= '"+auctionID+"'");
 		} catch(Exception e) {
 			System.out.println(e);
 			return "failure";
