@@ -265,6 +265,7 @@ public class ItemDao {
 				items.add(item);
 				
 				Auction auction = new Auction();
+				auction.setAuctionID(rs.getInt("AuctionID"));
 				auction.setMinimumBid(rs.getInt("Reserve"));
 				auction.setBidIncrement(rs.getInt("Increment"));
 				auctions.add(auction);
@@ -313,6 +314,7 @@ public class ItemDao {
 			rs= st.executeQuery("SELECT A.* FROM ItemData I, AuctionData A WHERE I.ItemType LIKE '%"+itemType+"%' AND A.ItemID = I.ItemID AND A.ClosingBidID IS NULL");
 			while (rs.next()) {
 				Auction auction = new Auction();
+				auction.setAuctionID(rs.getInt("AuctionID"));
 				auction.setMinimumBid(rs.getInt("Reserve"));
 				auction.setBidIncrement(rs.getInt("Increment"));
 				auctions.add(auction);
