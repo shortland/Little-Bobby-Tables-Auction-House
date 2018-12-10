@@ -90,25 +90,37 @@ public class BidDao {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://138.197.50.244:3306/LittleBobbyTablesAuctionHouse",  "littlebobbytables", "bestcse305group");
 			Statement st = con.createStatement();
+			Statement stmt=con.createStatement();
+			Statement s=con.createStatement();
 			ResultSet rs= st.executeQuery("SELECT A.*, B.* FROM AuctionData A, ItemData I, Bid B WHERE A.ItemID='"+itemID+"' AND A.AuctionID = '"+auctionID+"' AND A.CurrentHighBid = B.MaxBid GROUP BY A.AuctionID, B.BidNum");
-			if (Integer.toString(rs.getInt("AuctionID")).equals(auctionID)) {
-				if(rs.getInt("CurrentHighBid")>maxBid && !Integer.toString(rs.getInt("CustomerID")).equals(customerID)) {
-					st.executeUpdate("INSERT INTO Bid (AuctionID, CustomerID, Value, MaxBid) VALUE('"+auctionID+"', '"+customerID+"', '"+currentBid+"', '"+maxBid+"')");
-					bid.setAuctionID(Integer.parseInt(auctionID));
-					bid.setCustomerID(customerID);
-					bid.setBidPrice(currentBid);
-					bid.setMaxBid(maxBid);
-					float x= rs.getInt("Increment")+currentBid;
-					st.executeUpdate("INSERT INTO Bid(AuctionID, CustomerID, Value, MaxBid) VALUE('"+auctionID+"', '"+rs.getInt("CustomerID")+"', '"+x+"', '"+rs.getInt("MaxBid")+"')");
+			if(rs.next()) {
+				if (rs.getInt("AuctionID")==Integer.parseInt(auctionID)) {
+					int currentHigh=rs.getInt("CurrentHighBid");
+					System.out.println(currentHigh);
+					int cID=rs.getInt("CustomerID");
+					System.out.println(cID);
+					System.out.println(customerID);
+					if(currentHigh>maxBid && cID!=Integer.parseInt(customerID)) {
+						System.out.println("Auto Submit ");
+						stmt.executeUpdate("INSERT INTO Bid (AuctionID, CustomerID, Value, MaxBid) VALUE('"+auctionID+"', '"+customerID+"', '"+currentBid+"', '"+maxBid+"')");
+						bid.setAuctionID(Integer.parseInt(auctionID));
+						bid.setCustomerID(customerID);
+						bid.setBidPrice(currentBid);
+						bid.setMaxBid(maxBid);
+						float x= rs.getInt("Increment")+currentBid;
+						s.executeUpdate("INSERT INTO Bid(AuctionID, CustomerID, Value, MaxBid) VALUE('"+auctionID+"', '"+rs.getInt("CustomerID")+"', '"+x+"', '"+rs.getInt("MaxBid")+"')");
+					}
+					else {
+						System.out.println("hi");
+						st.executeUpdate("INSERT INTO Bid (AuctionID, CustomerID, Value, MaxBid) VALUE('"+auctionID+"', '"+customerID+"', '"+currentBid+"', '"+maxBid+"')");
+						bid.setAuctionID(Integer.parseInt(auctionID));
+						bid.setCustomerID(customerID);
+						bid.setBidPrice(currentBid);
+						st.executeUpdate("UPDATE AuctionData SET CurrentHighBid='"+maxBid+"' WHERE AuctionID= '"+auctionID+"'");
+					}	
 				}
-				else {
-					st.executeUpdate("INSERT INTO Bid (AuctionID, CustomerID, Value, MaxBid) VALUE('"+auctionID+"', '"+customerID+"', '"+currentBid+"', '"+maxBid+"')");
-					bid.setAuctionID(Integer.parseInt(auctionID));
-					bid.setCustomerID(customerID);
-					bid.setBidPrice(currentBid);
-					st.executeQuery("UPDATE AuctionData SET CurrentHighBid='"+maxBid+"' WHERE AuctionID= '"+auctionID+"'");
-				}	
 			}
+			
 		}catch(Exception e) {
 			System.out.println(e);
 		}
