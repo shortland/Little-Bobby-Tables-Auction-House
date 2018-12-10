@@ -14,7 +14,7 @@
 		<link href="webjars/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" />
 		<title>Customer Representative Home</title>
 	</head>
-	<body>
+	<body style="background-color:#D8BFD8">
 	
 		<h1>Welcome to the Online Auction House!</h1>
 		<div class="container">
