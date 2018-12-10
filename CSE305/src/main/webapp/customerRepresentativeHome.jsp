@@ -38,8 +38,8 @@
 				}
 			%>
 			
-			<div class="row">
-				<div class="col">
+			<div class="col">
+				<div class="row">
 					<div class="card">
 					  <div class="card-body">
 					    <h5 class="card-title">Record a Sale</h5>
@@ -51,7 +51,7 @@
 					  </div>
 					</div>
 				</div>
-				<div class="col">
+				<div class="row">
 					<div class="card">
 					  <div class="card-body">
 					    <h5 class="card-title">Manage Customer</h5>
@@ -70,7 +70,7 @@
 					  </div>
 					</div>
 				</div>
-				<div class="col">
+				<div class="row">
 					<div class="card">
 					  <div class="card-body">
 					    <h5 class="card-title">View Customer Mailing List</h5>
@@ -82,7 +82,7 @@
 					  </div>
 					</div>
 				</div>
-				<div class="col">
+				<div class="row">
 					<div class="card">
 					  <div class="card-body">
 					    <h5 class="card-title">View Suggestions for Customers</h5>
