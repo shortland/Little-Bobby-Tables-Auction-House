@@ -5,7 +5,7 @@
 ```text
 Ilan Kleiman - ilan.kleiman@stonybrook.edu
 Ibrahim Khan - ibrahim.khan@stonybrook.edu
-Shih-Chuan Lin - shih-chuan.lin@stonybrook.edu
+Shih-Chuan (David) Lin - shih-chuan.lin@stonybrook.edu
 ```
 
 ## Compiled War File
